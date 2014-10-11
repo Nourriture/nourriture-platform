@@ -9,7 +9,7 @@
 apt-get update
 
 # Install Node.js dependencies
-apt-get -y install g++ curl libssl-dev apache2-utils
+apt-get -y install g++ curl libssl-dev apache2-utils make
 apt-get -y install git-core
 
 # Install Node.js (Webserver/Engine)
