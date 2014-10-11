@@ -9,13 +9,14 @@
 apt-get update
 
 # Install Node.js dependencies
-apt-get install g++ curl libssl-dev apache2-utils
-apt-get install git-core
+apt-get -y install g++ curl libssl-dev apache2-utils
+apt-get -y install git-core
 
 # Install Node.js (Webserver/Engine)
 mkdir tmp
+cd tmp
 git clone git://github.com/ry/node.git
-cd tmp/node
+cd node
 git checkout v0.10.32-release
 ./configure
 make
