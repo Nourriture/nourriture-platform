@@ -6,11 +6,27 @@
 #
 # Niels Søholm (2014-10-11)
 
-sudo su
 apt-get update
 
+# Install Node.js dependencies
+apt-get install g++ curl libssl-dev apache2-utils
+apt-get install git-core
+
 # Install Node.js (Webserver/Engine)
-apt-get install nodejs
+mkdir tmp
+git clone git://github.com/ry/node.git
+cd tmp/node
+git checkout v0.10.32-release
+./configure
+make
+make install
+cd ../..
 
 # Install Node Package Manager (NPM, to manage 3rd-party JS dependencies)
-apt-get install npm
+cd tmp
+wget http://npmjs.org/install.sh
+sh ./install.sh
+cd ..
+
+# Clean up
+rm -r tmp
