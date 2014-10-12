@@ -5,6 +5,8 @@
 #
 # Niels Søholm (2014-10-11)
 
+rm -r build
+
 mkdir build
 mkdir build/package
 
