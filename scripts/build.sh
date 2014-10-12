@@ -26,4 +26,3 @@ sed package.json -e "s/\(\"version\":\s\"[0-9]*.[0-9]*.\)[0-9]\"/\1$BUILD_NUMBER
 cd build
 zip $PK_NAME.zip -r $PK_NAME/
 cd ..
-#tar jcvf build/nourriture-0.1.${BUILD_NUMBER}.tar.bz2 build/package
