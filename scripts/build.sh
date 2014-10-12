@@ -5,13 +5,18 @@
 #
 # Niels Søholm (2014-10-11)
 
+# Clean up any old build
 rm -r build
 
+# Prepare build output folders
 mkdir build
 mkdir build/package
 
+# Copy source files
 cp index.js build/package/index.js
 
+# Inject build number (from Jenkins environment variable) into package.json
 sed package.json -e "s/\(\"version\":\s\"[0-9]*.[0-9]*.\)[0-9]\"/\1$BUILD_NUMBER\"/g" > build/package/package.json
 
+# Package everything into a tar with version number in the filename
 tar jcvf build/nourriture-0.1.${BUILD_NUMBER}.tar.bz2 build/package
