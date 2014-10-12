@@ -26,13 +26,11 @@ server.get("/customer/:name", function(req, res, next) {
     for (var i = 0; i < customers.length; i++) {
         var customer = customers[i];
         if(customer.name == req.params.name) {
-            res.send("Hello " + customer.fullname + "!");
-            next();
+            res.send(customer);
             return;
         }
     }
-    res.send("Who are you?");
-    next();
+    next(new restify.InvalidContentError("No user found with the given username"));
 });
 
 // Update - Customer profile
@@ -49,7 +47,7 @@ server.del("/customer/:name", function(req, res, next) {
 
 // Reads (plural) - Customer profile
 server.get("/customer", function(req, res, next) {
-    res.send('hello ' + req.params.name);
+    res.send(customers);
     next();
 });
 
