@@ -11,6 +11,7 @@ mkdir build
 mkdir build/package
 
 cp index.js build/package/index.js
-cp package.json build/package/package.json
+
+sed package.json -e "s/\(\"version\":\s\"[0-9]*.[0-9]*.\)[0-9]\"/\1$BUILD_NUMBER\"/g" > build/package/package.json
 
 tar jcvf build/nourriture-0.1.${BUILD_NUMBER}.tar.bz2 build/package
