@@ -30,7 +30,7 @@ server.get("/customer/:name", function(req, res, next) {
             return;
         }
     }
-    next(new restify.InvalidContentError("No user found with the given username"));
+    next(new restify.ResourceNotFoundError("No user found with the given username"));
 });
 
 // Update - Customer profile
