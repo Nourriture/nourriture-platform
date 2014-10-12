@@ -1,13 +1,26 @@
 var restify = require('restify');
+var server = restify.createServer();
 
-function respond(req, res, next) {
+// Create - Customer profile
+server.post("/customer/:name", function(req, res, next) {
     res.send('hello ' + req.params.name);
     next();
-}
-
-var server = restify.createServer();
-server.get('/hello/:name', respond);
-server.head('/hello/:name', respond);
+});
+// Read - Customer profile
+server.get("/customer/:name", function(req, res, next) {
+    res.send('hello ' + req.params.name);
+    next();
+});
+// Update - Customer profile
+server.put("/customer/:name", function(req, res, next) {
+    res.send('hello ' + req.params.name);
+    next();
+});
+// Delete - Customer profile
+server.del("/customer/:name", function(req, res, next) {
+    res.send('hello ' + req.params.name);
+    next();
+});
 
 server.listen(8080, function() {
     console.log('%s listening at %s', server.name, server.url);
