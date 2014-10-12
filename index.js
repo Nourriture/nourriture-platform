@@ -62,8 +62,16 @@ server.put("/customer/:name", function(req, res, next) {
 
 // Delete - Customer profile
 server.del("/customer/:name", function(req, res, next) {
-    res.send('hello ' + req.params.name);
-    next();
+    for (var i = 0; i < customers.length; i++) {
+        var customer = customers[i];
+        if(customer.name == req.params.name) {
+            customers.splice(i, 1);
+            res.send(customer);
+            return;
+        }
+    }
+
+    next(new restify.ResourceNotFoundError("No user found with the given username"));
 });
 
 // Reads (plural) - Customer profile
