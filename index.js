@@ -43,8 +43,21 @@ server.get("/customer/:name", function(req, res, next) {
 
 // Update - Customer profile
 server.put("/customer/:name", function(req, res, next) {
-    res.send('hello ' + req.params.name);
-    next();
+    if(!req.body) {
+        next(new restify.InvalidContentError("No user submitted for update"));
+        return;
+    }
+
+    for (var i = 0; i < customers.length; i++) {
+        var customer = customers[i];
+        if(customer.name == req.params.name) {
+            customers[i] = req.body;
+            res.send(req.body);
+            return;
+        }
+    }
+
+    next(new restify.ResourceNotFoundError("No user found with the given username"));
 });
 
 // Delete - Customer profile
