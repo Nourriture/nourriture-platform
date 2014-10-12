@@ -1,5 +1,8 @@
 var restify = require('restify');
 var server = restify.createServer();
+server.use(restify.acceptParser(server.acceptable));
+server.use(restify.bodyParser());
+
 
 // Mock customer database
 var customers = [
@@ -17,8 +20,13 @@ var customers = [
 
 // Create - Customer profile
 server.post("/customer/:name", function(req, res, next) {
-    res.send('hello ' + req.params.name);
-    next();
+    if(req.body) {
+        customers.push(req.body);
+        res.send(req.body);
+        next();
+    } else {
+        next(new restify.InvalidContentError("No user submitted for creation"));
+    }
 });
 
 // Read - Customer profile
