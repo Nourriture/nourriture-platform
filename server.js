@@ -15,7 +15,8 @@ server.use(restify.fullResponse());
 server.use(restify.bodyParser());
 
 server.listen(8080, function () {
-    console.log('- - - %s listening at %s - - -', server.name, server.url)
+    console.log('- - - %s listening at %s - - -', server.name, server.url);
+    require('./utilities/document')(server.router.mounts, 'restify');
 });
 
 //COMPANY related API calls
