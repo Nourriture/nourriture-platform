@@ -9,6 +9,11 @@ var server = restify.createServer({name:'Nourriture server', version:'0.0.1'});
 server.get('/hello/:name', respond);
 server.head('/hello/:name', respond);
 
-server.listen(8080, function() {
+var port = 8080;
+if (process.argv[2]) {
+    var port = parseInt(process.argv[2]);
+}
+
+server.listen(port, function() {
     console.log('%s listening at %s', server.name, server.url);
 });
