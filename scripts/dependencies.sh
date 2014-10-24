@@ -29,5 +29,8 @@ wget http://npmjs.org/install.sh
 sh ./install.sh
 cd ..
 
+# Install node utility for registering services (i.e. run forever)
+npm install forever -g
+
 # Clean up
 rm -r tmp
