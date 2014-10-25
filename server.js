@@ -33,7 +33,7 @@ server.del('/company/:id', companyModule.deleteCompany);
 
 //RECIPE related API calls
 server.post('/recipe/',   recipeModule.insertRecipe);
-server.get('/recipe',     recipeModule.selectAllRecipe);
+server.get('/recipe',     recipeModule.selectAllRecipes);
 server.get('/recipe/:id', recipeModule.selectRecipeById);
 server.put('/recipe/:name', recipeModule.selectRecipeByName);
 server.del('/recipe/:id', recipeModule.deleteRecipe);

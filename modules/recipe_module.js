@@ -61,10 +61,10 @@ function selectRecipeByName(req, res, next){
     })
 }
 
-function selectAllRecipe(req, res, next){
+function selectAllRecipes(req, res, next){
     console.log('Select all recipes requested');
 
-    saveModule.find({}, function (error, companies) {
+    saveModule.find({}, function (error, recipe) {
         res.send(companies);
         next();
     })
@@ -104,6 +104,6 @@ function deleteRecipe(req, res, next){
 exports.insertRecipe   = insertRecipe;
 exports.selectRecipeById = selectRecipeById;
 exports.selectRecipeByName = selectRecipeByName;
-exports.selectAllRecipe   = SelectAllRecipe;
+exports.selectAllRecipes   = selectAllRecipes;
 exports.updateRecipe   = updateRecipe;
 exports.deleteRecipe   = deleteRecipe;
