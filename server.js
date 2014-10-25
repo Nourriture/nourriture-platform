@@ -30,3 +30,11 @@ server.get('/company',     companyModule.readAllCompanies);
 server.get('/company/:id', companyModule.readCompany);
 server.put('/company/:id', companyModule.updateCompany);
 server.del('/company/:id', companyModule.deleteCompany);
+
+//RECIPE related API calls
+server.post('/recipe/',   recipeModule.insertRecipe);
+server.get('/recipe',     recipeModule.selectAllRecipe);
+server.get('/recipe/:id', recipeModule.selectRecipeById);
+server.put('/recipe/:name', recipeModule.selectRecipeByName);
+server.del('/recipe/:id', recipeModule.deleteRecipe);
+server.put('/recipe/:id', recipeModule.updateRecipe);
