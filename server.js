@@ -31,6 +31,7 @@ server.get('/company/:id', companyModule.readCompany);
 server.put('/company/:id', companyModule.updateCompany);
 server.del('/company/:id', companyModule.deleteCompany);
 
+<<<<<<< Updated upstream
 //RECIPE related API calls
 server.post('/recipe/',   recipeModule.insertRecipe);
 server.get('/recipe',     recipeModule.selectAllRecipes);
@@ -38,3 +39,10 @@ server.get('/recipe/:id', recipeModule.selectRecipeById);
 server.put('/recipe/:name', recipeModule.selectRecipeByName);
 server.del('/recipe/:id', recipeModule.deleteRecipe);
 server.put('/recipe/:id', recipeModule.updateRecipe);
+=======
+server.post('/gastronomist/', gastronomistModule.createGastronomist);
+server.get('/gastronomist', gastronomistModule.readAllGastronomist);
+server.get('/gastronomist/:id', gastronomistModule.readGastronomist);
+server.put('/gastronomist/:id', gastronomistModule.updateGastronomist);
+server.del('/gastronomist/:id', gastronomistModule.deleteGastronomist);
+>>>>>>> Stashed changes
