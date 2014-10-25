@@ -5,7 +5,7 @@
 # Niels Søholm (2014-10-11)
 
 # Extract archieve
-unzip *.zip
+unzip -o *.zip
 cd nourriture-*
 
 # Install node.js dependency modules using NPM
