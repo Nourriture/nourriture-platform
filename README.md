@@ -9,16 +9,17 @@ Please, refer to the architecture diagram
 (http://tinyurl.com/qattlat).
 
 API Table (will be updated continuously during development):
-┌────────┬────────────────────┬──────────────┐
-│        │ Name               │ Path         │
-├────────┼────────────────────┼──────────────┤
-│ POST   │ postcompany        │ /company/    │
-├────────┼────────────────────┼──────────────┤
-│ GET    │ getcompany         │ /company     │
-├────────┼────────────────────┼──────────────┤
-│ GET    │ getcompanyid       │ /company/:id │
-├────────┼────────────────────┼──────────────┤
-│ PUT    │ putcompanyid       │ /company/:id │
-├────────┼────────────────────┼──────────────┤
-│ DELETE │ deletecompanyid    │ /company/:id │
-└────────┴────────────────────┴──────────────┘
+
+`┌────────┬────────────────────┬──────────────┐`
+`│        │ Name               │ Path         │`
+`├────────┼────────────────────┼──────────────┤`
+`│ POST   │ postcompany        │ /company/    │`
+`├────────┼────────────────────┼──────────────┤`
+`│ GET    │ getcompany         │ /company     │`
+`├────────┼────────────────────┼──────────────┤`
+`│ GET    │ getcompanyid       │ /company/:id │`
+`├────────┼────────────────────┼──────────────┤`
+`│ PUT    │ putcompanyid       │ /company/:id │`
+`├────────┼────────────────────┼──────────────┤`
+`│ DELETE │ deletecompanyid    │ /company/:id │`
+`└────────┴────────────────────┴──────────────┘`
