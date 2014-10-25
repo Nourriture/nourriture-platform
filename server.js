@@ -38,3 +38,13 @@ server.get('/recipe/:id', recipeModule.selectRecipeById);
 server.put('/recipe/:name', recipeModule.selectRecipeByName);
 server.del('/recipe/:id', recipeModule.deleteRecipe);
 server.put('/recipe/:id', recipeModule.updateRecipe);
+
+//INGREDIENT related API calls
+
+server.post('/ingredient/',   			ingredientModule.createIngredient);
+server.put('/ingredient/:id', 			ingredientModule.updateIngredient);
+server.del('/ingredient/:id', 			ingredientModule.deleteIngredient);
+server.get('/ingredient',     			ingredientModule.selectAllIngredients);
+server.get('/ingredient/:id', 			ingredientModule.selectIngredientById);
+server.get('/ingredient/:name', 		ingredientModule.selectIngredientByName);
+server.get('/ingredient/:companyId',   	ingredientModule.selectAllIngredientsOfCompany);
