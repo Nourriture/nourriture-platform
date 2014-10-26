@@ -48,3 +48,11 @@ server.get('/ingredient',     			ingredientModule.selectAllIngredients);
 server.get('/ingredient/:id', 			ingredientModule.selectIngredientById);
 server.get('/ingredient/:name', 		ingredientModule.selectIngredientByName);
 server.get('/ingredient/:companyId',   	ingredientModule.selectAllIngredientsOfCompany);
+
+// GASTRONOMIST related API calls
+
+server.post('/gastronomist/', gastronomistModule.createGastronomist);
+server.get('/gastronomist', gastronomistModule.readAllGastronomist);
+server.get('/gastronomist/:id', gastronomistModule.readGastronomist);
+server.put('/gastronomist/:id', gastronomistModule.updateGastronomist);
+server.del('/gastronomist/:id', gastronomistModule.deleteGastronomist);
