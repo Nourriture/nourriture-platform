@@ -7,7 +7,7 @@
 module.exports =  function (routes, src) {
 
     var Table = require('cli-table');
-    var table = new Table({ head: ["", "Name", "Path"] });
+    var table = new Table({ head: ["", "Name", "Path"], chars: { 'left':'\t│', 'right':'  │', 'left-mid':'\t├', 'bottom-left':'\t└', 'top-left':'\t┌', 'mid-mid':'─┼', 'bottom-mid':'─┴', 'top-mid':'─┬' } });
 
     console.log('\nAPI for this service \n');
     if(src == 'restify')
