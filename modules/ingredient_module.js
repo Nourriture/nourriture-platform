@@ -4,117 +4,142 @@
  */
 
 var restify = require('restify');
-var saveModule = require('save')('ingredient');
-var companies = require('save')('company');
 
 module.exports = function (server, models) {
-
     server.post('/ingredient/', function (req, res, next) {
+
         console.log('Create ingredient requested');
-
-        if (req.params.name === undefined) {
-            return next(new restify.InvalidArgumentError('Ingredient name attribute missing'));
-        }
-
-        saveModule.create({name: req.params.name}, function (error, ingredient) {
-            if (error) {
-                return next(new restify.InvalidArgumentError(JSON.stringify(error.errors)))
+        var newIngredient = models.Ingredient(req.body);
+        newIngredient.save(function (err) {
+            if (!err) {
+                res.send(req.body);
+                next();
             }
-            res.send(201, ingredient);
-            next();
-        })
+            else {
+                if(err.name == "ValidationError") {
+                    next(new restify.InvalidContentError(err.toString()));
+                }
+                else {
+                   console.error("Failed to insert ingredient into database:", err);
+                   next(new restify.InternalError("Failed to insert Ingredient due to an unexpected internal error"));
+                }
+            }
+        });
     });
 
-    server.put('/ingredient/:id', function (req, res, next) {
+    server.put('/ingredient/:name', function (req, res, next) {
+        if (!req.body) {
+            next(new restify.InvalidContentError("No ingredient submitted for update"));
+            return;
+        }
+
         console.log('Update ingredient requested');
+        models.Ingredient.find({ name:req.params.name }, function (err, result) {
+            if(!err) {
+                if(result.length != 0) {
+                    var ingredient = result[0];
+                    for(var key in req.body) {
+                        ingredient[key] = req.body[key];
+                    }
 
-        if (req.params.name === undefined) {
-            return next(new restify.InvalidArgumentError('Company name attribute missing'))
-        }
-
-        saveModule.update({_id: req.params.id, name: req.params.name}, function (error, user) {
-            if (error) {
-                return next(new restify.InvalidArgumentError(JSON.stringify(error.errors)))
+                    ingredient.save(function (err) {
+                        if (!err) {
+                            res.send(ingredient);
+                            next();
+                        }
+                        else {
+                            if(err.name == "ValidationError") {
+                                next(new restify.InvalidContentError(err.toString()));
+                            }
+                            else {
+                                console.error("Failed to update ingredient into database:", err);
+                                next(new restify.InternalError("Failed to update ingredient due to an unexpected internal error"));
+                            }
+                        }
+                    });
+                }
+                else {
+                    next(new restify.ResourceNotFoundError("No ingredient found with the given name"));
+                }
             }
-            res.send();
-            next();
-        })
+            else {
+                console.error("Failed to query database for ingredient profile:", err);
+                next(new restify.InternalError("Failed to update ingredient due to an unexpected internal error"));
+            }
+        });
     });
 
-    server.del('/ingredient/:id', function (req, res, next) {
-        console.log('Delete company requested');
-
-        saveModule.delete(req.params.id, function (error, ingredient) {
-            if (error) {
-                return next(new restify.InvalidArgumentError(JSON.stringify(error.errors)))
+    server.del('/ingredient/:name', function (req, res, next) {
+        console.log('Delete ingredient requested');
+        models.Ingredient.findOneAndRemove({ name:req.params.name }, function (err, deletedIngredient) {
+            if(!err) {
+                if(deletedIngredient) {
+                    res.send(deletedIngredient);
+                    next();
+                }
+                else {
+                    next(new restify.ResourceNotFoundError("No ingredient found with the given name"));
+                }
             }
-            res.send();
-            next();
-        })
+            else {
+                console.error("Failed to delete ingredient profile from database:", err);
+                next(new restify.InternalError("Failed to delete ingredients due to an unexpected internal error"));
+            }
+        });
     });
 
     server.get('/ingredient', function (req, res, next) {
         console.log('Select all ingredients requested');
-
-        saveModule.find({}, function (error, ingredients) {
-            res.send(ingredients);
-            next();
-        })
-    });
-
-    server.get('/ingredient/:id', function(req, res, next) {
-        console.log('Select ingredient id requested');
-
-        saveModule.findOne({_id: req.params.id}, function (error, ingredient) {
-            if (error) {
-                return next(new restify.InvalidArgumentError(JSON.stringify(error.errors)))
-            }
-            if (ingredient) {
-                res.send(ingredient);
+        models.Ingredient.find(function (err, ingredients) {
+            if (!err) {
+                res.send(ingredients);
                 next();
             }
             else {
-                res.send(404);
-                next();
+                console.error("Failed to read ingredients from database:", err);
+                next(new restify.InternalError("Failed to read ingredients due to an unexpected internal error"));
             }
-        })
+        });
     });
 
     server.get('/ingredient/:name', function (req, res, next) {
         console.log('Select ingredient name requested');
-
-        saveModule.findOne({_name: req.params.name}, function (error, ingredient) {
-            if (error) {
-                return next(new restify.InvalidArgumentError(JSON.stringify(error.errors)))
-            }
-            if (ingredient) {
-                res.send(ingredient)
-                next();
+        models.Ingredient.findOne({ name:req.params.name }, function (err, ingredient) {
+            if (!err) {
+                if (ingredient.length != 0) {
+                    res.send(ingredient);
+                    next();
+                }
+                else {
+                    next(new restify.ResourceNotFoundError("No ingredient found with the given name"));
+                }
             }
             else {
-                res.send(404);
-                next();
+                console.error("Failed to query database for ingredient profile:", err);
+                next(new restify.InternalError("Failed to read ingredient due to an unexpected internal error"));
             }
-        })
+        });
     });
 
-    server.get('/ingredient/:companyId', function (req, res, next) {
+    server.get('/ingredient/:companyName', function (req, res, next) {
         console.log('Select all ingredients company requested');
-
-        company.findOne({_id: req.params.id}, function (error, company) {
-            if (error) {
-                return next(new restify.InvalidArgumentError(JSON.stringify(error.errors)))
-            }
-            if (company) {
-                saveModule.find({}, function (error, ingredients) {
-                    res.send(ingredients);
-                    next;
-                })
+        models.Company.findOne({ name:req.params.name }, function (err, company) {
+            if (!err) {
+                models.Ingredient.find(function (err, ingredients) {
+                    if (!err) {
+                        res.send(ingredients);
+                        next();
+                    }
+                    else {
+                        console.error("Failed to read ingredients from database:", err);
+                        next(new restify.InternalError("Failed to read ingredients due to an unexpected internal error"));
+                    }
+                });
             }
             else {
-                res.send(404);
-                next();
+                console.error("Failed to read ingredients from database:", err);
+                next(new restify.InternalError("Failed to read ingredients due to an unexpected internal error"));
             }
-        })
+        });
     });
 }
