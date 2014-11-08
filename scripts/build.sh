@@ -20,6 +20,7 @@ mkdir build/$PK_NAME
 cp server.js build/$PK_NAME/server.js
 cp -r modules build/$PK_NAME/modules
 cp -r utilities build/$PK_NAME/utilities
+cp -r models build/$PK_NAME/models
 
 # Inject build number (from Jenkins environment variable) into package.json
 sed package.json -e "s/\(\"version\":\s\"[0-9]*.[0-9]*.\)[0-9]\"/\1$BUILD_NUMBER\"/g" > build/$PK_NAME/package.json
