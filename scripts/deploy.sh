@@ -12,7 +12,7 @@ scp nourriture-0.1.*.zip training:/srv/$ENVIRONMENT/nourriture.zip
 ssh training <<EOF
   cd /srv/$ENVIRONMENT/
 
-  forever stop dev
+  forever stop $ENVIRONMENT
   rm -f -r nourriture-*
   
   mkdir -p logs
