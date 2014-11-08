@@ -31,6 +31,7 @@ cd ..
 
 # Install node utility for registering services (i.e. run forever)
 npm install forever -g
+apt-get -y install unzip
 
 # Clean up
 rm -r tmp
