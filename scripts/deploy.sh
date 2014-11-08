@@ -8,7 +8,7 @@
 #
 # Niels Søholm (2014-11-08)
 
-scp nourriture-0.1.*.zip training:/srv/nourriture/nourriture.zip
+scp nourriture-0.1.*.zip training:/srv/$ENVIRONMENT/nourriture.zip
 
 ssh training <<EOF
   cd /srv/$ENVIRONMENT/
