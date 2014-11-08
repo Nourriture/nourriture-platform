@@ -15,6 +15,8 @@ ssh training <<EOF
 
   forever stop dev
   rm -f -r nourriture-*
+  
+  mkdir -p logs
 
   unzip -o *.zip
   cd nourriture-*
