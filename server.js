@@ -25,7 +25,10 @@ var startServer = function() {
     var db = mongoose.connection;
 
     // On failure to connect, abort server startup and show error
-    db.on('error', console.error.bind(console, 'connection error:'));
+    db.on('error', function(err) {
+        console.error("connection error:" + err);
+        console.log("Unable to connect to database. Shutting down.");
+    });
 
     // On successful connection, finalize server startup
     db.once('open', function() {
