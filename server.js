@@ -6,16 +6,17 @@
 var restify             = require('restify');
 var mongoose            = require("mongoose");
 var models              = require("./models/data_model")(mongoose);
+var nconf               = require("nconf");
 
-var server = restify.createServer({ name: 'Nourriture server', version: '0.0.1' });
-var connstr = "mongodb://localhost:27017/nourriture-app";   //TODO: change once up and running
+nconf.argv()
+    .env()
+    .file({ file: "default-config.json"})
+    .file({ file: "config.json" });
+
+var server = restify.createServer({ name: nconf.get("name"), version: nconf.get("version") });
+var connstr = nconf.get("connection-string");
 var conn = {};
 var mong = {};
-
-var port = 8080;
-if (process.argv[2]) {
-    var port = parseInt(process.argv[2]);
-}
 
 server.use(restify.fullResponse());
 server.use(restify.bodyParser());
@@ -35,7 +36,7 @@ var startServer = function() {
         console.log("Connected to database successfully!");
         conn = db;
 
-        server.listen(port, function () {
+        server.listen(nconf.get("port"), function () {
             console.log('- - - %s listening at %s - - -', server.name, server.url);
             require('./utilities/document')(server.router.mounts, 'restify');
         });

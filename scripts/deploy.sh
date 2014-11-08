@@ -4,7 +4,6 @@
 #
 # NOTE: Expects variables
 #   - $ENVIRONMENT: Used root folder and process uid
-#   - $PORT:        Port node web server will listen on
 #
 # Niels Søholm (2014-11-08)
 
@@ -22,7 +21,8 @@ ssh training <<EOF
   cd nourriture-*
 
   npm install
-  forever -a --uid "$ENVIRONMENT" -l "/srv/$ENVIRONMENT/logs/forever-dev.log" -o "/srv/$ENVIRONMENT/logs/forever-dev-out.log" -e "/srv/$ENVIRONMENT/logs/forever-dev-err.log" -p "/srv/$ENVIRONMENT/.forever" --minUptime 1000 --spinSleepTime 1000 start server.js $PORT
+  cp ../config.json config.json
+  forever -a --uid "$ENVIRONMENT" -l "/srv/$ENVIRONMENT/logs/forever-dev.log" -o "/srv/$ENVIRONMENT/logs/forever-dev-out.log" -e "/srv/$ENVIRONMENT/logs/forever-dev-err.log" -p "/srv/$ENVIRONMENT/.forever" --minUptime 1000 --spinSleepTime 1000 start server.js
 
   exit
 EOF
