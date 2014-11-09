@@ -8,16 +8,11 @@ var mongoose            = require("mongoose");
 var models              = require("./models/data_model")(mongoose);
 var nconf               = require("nconf");
 
-nconf.argv()
-    .env()
-    .file({ file: "default-config.json"})
-    .file({ file: "config.json" });
+// Load configuration
+require("./modules/config_module")(nconf);
 
+// Initialize server
 var server = restify.createServer({ name: nconf.get("name"), version: nconf.get("version") });
-var connstr = nconf.get("connection-string");
-var conn = {};
-var mong = {};
-
 server.use(restify.fullResponse());
 server.use(restify.bodyParser());
 
@@ -34,7 +29,6 @@ var startServer = function() {
     // On successful connection, finalize server startup
     db.once('open', function() {
         console.log("Connected to database successfully!");
-        conn = db;
 
         server.listen(nconf.get("port"), function () {
             console.log('- - - %s listening at %s - - -', server.name, server.url);
@@ -42,8 +36,7 @@ var startServer = function() {
         });
     });
 
-    mongoose.connect(connstr);
-    mong = new mongoose.Mongoose();
+    mongoose.connect(nconf.get("connection-string"));
 };
 
 //Register routes (require modules) -> by invoking their only ONE exported function (constructor) -> register request handlers into "handlers/endpoints table"
