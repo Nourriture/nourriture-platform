@@ -1,22 +1,18 @@
 /**
  * Created by Pavel Prochazka on 22/10/14.
- * The main server based on restify
+ * The platform backend for Nourriture (based on Restify)
  */
 
 var restify             = require('restify');
 var mongoose            = require("mongoose");
 var models              = require("./models/data_model")(mongoose);
+var nconf               = require("nconf");
 
-var server = restify.createServer({ name: 'Nourriture server', version: '0.0.1' });
-var connstr = "mongodb://localhost:27017/nourriture-app";   //TODO: change once up and running
-var conn = {};
-var mong = {};
+// Load configuration
+require("./modules/config_module")(nconf);
 
-var port = 8080;
-if (process.argv[2]) {
-    var port = parseInt(process.argv[2]);
-}
-
+// Initialize server
+var server = restify.createServer({ name: nconf.get("name"), version: nconf.get("version") });
 server.use(restify.fullResponse());
 server.use(restify.bodyParser());
 
@@ -25,21 +21,22 @@ var startServer = function() {
     var db = mongoose.connection;
 
     // On failure to connect, abort server startup and show error
-    db.on('error', console.error.bind(console, 'connection error:'));
+    db.on('error', function(err) {
+        console.error("connection error:" + err);
+        console.log("Unable to connect to database. Shutting down.");
+    });
 
     // On successful connection, finalize server startup
     db.once('open', function() {
         console.log("Connected to database successfully!");
-        conn = db;
 
-        server.listen(port, function () {
+        server.listen(nconf.get("port"), function () {
             console.log('- - - %s listening at %s - - -', server.name, server.url);
             require('./utilities/document')(server.router.mounts, 'restify');
         });
     });
 
-    mongoose.connect(connstr);
-    mong = new mongoose.Mongoose();
+    mongoose.connect(nconf.get("connection-string"));
 };
 
 //Register routes (require modules) -> by invoking their only ONE exported function (constructor) -> register request handlers into "handlers/endpoints table"
