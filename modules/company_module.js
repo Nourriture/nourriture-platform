@@ -5,7 +5,7 @@
 
 var restify = require('restify');
 var fs = require('fs');
-//var _ = require('lodash'); TODO: what for?
+//var _ = require('lodash'); TODO: what for hm?
 
 module.exports = function (server, models) {
 
