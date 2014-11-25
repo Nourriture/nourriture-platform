@@ -86,7 +86,7 @@ module.exports = function (mongoose) {  //passing mongoose object to constructor
 
     // Bind to DB collection names and return on single object
     return {
-        Company: mongoose.model("company", Company),    //compiling SCHEMA into a MODEL (model is a class with which we construct documents)
+        Company: mongoose.model("company", Company),    //to use SCHEMA definition, we need to convert SCHEMA into a MODEL (model is a class with which we construct documents)
         Gastronomist: mongoose.model("gastronomist", Gastronomist),
         Ingredient: mongoose.model("ingredient", Ingredient),
         Recipe: mongoose.model("recipe", Recipe)
