@@ -5,7 +5,7 @@
 
 var restify             = require('restify');
 var mongoose            = require("mongoose");
-var models              = require("./models/data_model")(mongoose);
+var models              = require("./models/data_model")(mongoose); //passing "mongoose" object to data_model's constructor
 var nconf               = require("nconf");
 
 // Load configuration

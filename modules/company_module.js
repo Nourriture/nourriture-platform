@@ -5,9 +5,9 @@
 
 var restify = require('restify');
 var fs = require('fs');
-//var _ = require('lodash'); TODO: what for?
+//var _ = require('lodash'); TODO: what for??
 
-module.exports = function (server, models) {
+module.exports = function (server, models) { //passing mongoose object to constructor (this anonymous method)
 
     //Create a company
     server.post('/company/', function(req, res, next) {
