@@ -5,10 +5,10 @@
 
 var util = require('./data_model_middleware');
 
-module.exports = function (mongoose) {
+module.exports = function (mongoose) {  //passing mongoose object to constructor (this anonymous method)
 
     // COMPANY
-    var Company = mongoose.Schema({
+    var Company = mongoose.Schema({     //with Mongoose, everything is derived from a Schema (http://mongoosejs.com/docs/guide.html)
         created: { type: Date, required: true },
         modified: { type: Date, required: true },
         username: { type: String, required: true},
@@ -19,7 +19,7 @@ module.exports = function (mongoose) {
         phone: { type: String, validate: util.strLength(16) },
         email: { type: String, validate: util.strLength(128) }
     });
-    Company.pre('validate', true, util.updateTimeStamps);
+    Company.pre('validate', true, util.updateTimeStamps);   //Mongoose's middleware (http://mongoosejs.com/docs/middleware.html)
 
     // GASTRONOMIST
     var PartialRecipe = mongoose.Schema( {
@@ -86,7 +86,7 @@ module.exports = function (mongoose) {
 
     // Bind to DB collection names and return on single object
     return {
-        Company: mongoose.model("company", Company),
+        Company: mongoose.model("company", Company),    //compiling SCHEMA into a MODEL (model is a class with which we construct documents)
         Gastronomist: mongoose.model("gastronomist", Gastronomist),
         Ingredient: mongoose.model("ingredient", Ingredient),
         Recipe: mongoose.model("recipe", Recipe)
