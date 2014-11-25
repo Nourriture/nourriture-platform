@@ -5,8 +5,9 @@
 
 var restify             = require('restify');
 var mongoose            = require("mongoose");
-var models              = require("./models/data_model")(mongoose);
 var nconf               = require("nconf");
+// Load models
+var models              = require("./models/data_model")(mongoose); //passing "mongoose" object to data_model's constructor (will use it to define Schemas)
 
 // Load configuration
 require("./modules/config_module")(nconf);
@@ -30,13 +31,13 @@ var startServer = function() {
     db.once('open', function() {
         console.log("Connected to database successfully!");
 
-        server.listen(nconf.get("port"), function () {
+        server.listen(nconf.get("port"), function () {  // Finalize server startup by starting to listen at port #
             console.log('- - - %s listening at %s - - -', server.name, server.url);
-            require('./utilities/document')(server.router.mounts, 'restify');
+            require('./utilities/document')(server.router.mounts, 'restify');   // Print out fancy API table
         });
     });
 
-    mongoose.connect(nconf.get("connection-string"));
+    mongoose.connect(nconf.get("connection-string"));   // Gets the URL to db from config file
 };
 
 //Register routes (require modules) -> by invoking their only ONE exported function (constructor) -> register request handlers into "handlers/endpoints table"
