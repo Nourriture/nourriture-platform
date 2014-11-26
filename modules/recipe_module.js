@@ -116,7 +116,7 @@ module.exports = function (server, models) {
                 next();
             }
         })*/
-    });
+    }); //FIXME cannot work like this, because it will conflict with the above method
 
     server.get('/recipe', function (req, res, next) 
     {
@@ -143,35 +143,41 @@ module.exports = function (server, models) {
             return;
         }
 
-        models.Recipe.find({ "_id":req.params.id }, function(err, Recipe) 
-        {
-            if(!err) 
-            {
-                newRecipe.save(function (err)
-                {
+        // Retrieve existing recipes, overwrite fields, validate and save
+        models.Recipe.find({ _id:req.params.id }, function(err, recipes) {
+            if (!err) {
+                if (recipes.length != 0) {
+                    var recipe = recipes[0];    // Get the first founded recipe
 
-                    if(!err) 
-                    {
-                        res.send(req.body);
-                        next();
-                    } 
-                    else 
-                    {
-                        if (req.params.name === undefined) 
-                        {
-                             return next(new restify.InvalidArgumentError('Recipe name attribute missing'));
-                        }
-                             
+                    // Overwrite fields with value from request body
+                    for (var key in req.body) {     //req.body has to be POSTed in JSON format!!!
+                        recipe[key] = req.body[key];
                     }
-                } );
-            }
-            else 
-            {
-                    console.error("Failed to query database for recipe:", err);
-                    next(new restify.ResourceNotFoundError("No recipes found with the given id"));
+
+                    // Validate and save
+                    recipe.save(function (err) {
+                        if (!err) {
+                            res.send(recipe);
+                            next();
+                        } else {
+                            if (err.name == "ValidationError") {
+                                next(new restify.InvalidContentError(err.toString()));
+                            } else {
+                                console.error("Failed to insert recipe into database:", err);
+                                next(new restify.InternalError("Failed to update recipe due to an unexpected internal error"));
+                            }
+                        }
+                    });
+                } else {
+                    // No recipe found with given ID
+                    next(new restify.ResourceNotFoundError("No recipe found with the given ID"));
+                }
+            } else {
+                // Database connection error
+                console.error("Failed to query database for recipe: ", err);
+                next(new restify.InternalError("Failed to update recipe due to an unexpected internal error"));
             }
         });
-
         /*
         saveModule.update({
             _id: req.params.id,
@@ -184,7 +190,7 @@ module.exports = function (server, models) {
             res.send();
             next();
         })*/
-    });  //TODO: why does not work to test with WebStorm REST plugin???
+    }); //WORKS
 
     server.del('/recipe/:id', function (req, res, next) 
     {
