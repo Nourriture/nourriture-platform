@@ -6,10 +6,11 @@
 var restify = require('restify');
 
 module.exports = function (server, models) {
-    server.post('/ingredient/', function (req, res, next) {
+
+    server.post('/ingredient', function (req, res, next) {
 
         console.log('Create ingredient requested');
-        var newIngredient = models.Ingredient(req.body);
+        var newIngredient = new models.Ingredient(req.body);
         newIngredient.save(function (err) {
             if (!err) {
                 res.send(req.body);
@@ -25,16 +26,16 @@ module.exports = function (server, models) {
                 }
             }
         });
-    });
+    }); //WORKS!
 
-    server.put('/ingredient/:name', function (req, res, next) {
+    server.put('/ingredient/:id', function (req, res, next) {
         if (!req.body) {
             next(new restify.InvalidContentError("No ingredient submitted for update"));
             return;
         }
 
         console.log('Update ingredient requested');
-        models.Ingredient.find({ name:req.params.name }, function (err, result) {
+        models.Ingredient.find({ _id:req.params.id }, function (err, result) {
             if(!err) {
                 if(result.length != 0) {
                     var ingredient = result[0];
@@ -67,11 +68,11 @@ module.exports = function (server, models) {
                 next(new restify.InternalError("Failed to update ingredient due to an unexpected internal error"));
             }
         });
-    });
+    }); //WORKS!
 
-    server.del('/ingredient/:name', function (req, res, next) {
+    server.del('/ingredient/:id', function (req, res, next) {
         console.log('Delete ingredient requested');
-        models.Ingredient.findOneAndRemove({ name:req.params.name }, function (err, deletedIngredient) {
+        models.Ingredient.findOneAndRemove({ _id:req.params.id }, function (err, deletedIngredient) {
             if(!err) {
                 if(deletedIngredient) {
                     res.send(deletedIngredient);
@@ -86,7 +87,7 @@ module.exports = function (server, models) {
                 next(new restify.InternalError("Failed to delete ingredients due to an unexpected internal error"));
             }
         });
-    });
+    }); //WORKS!
 
     server.get('/ingredient', function (req, res, next) {
         console.log('Select all ingredients requested');
@@ -100,11 +101,11 @@ module.exports = function (server, models) {
                 next(new restify.InternalError("Failed to read ingredients due to an unexpected internal error"));
             }
         });
-    });
+    }); //WORKS!
 
-    server.get('/ingredient/:name', function (req, res, next) {
+    server.get('/ingredient/:id', function (req, res, next) {
         console.log('Select ingredient name requested');
-        models.Ingredient.findOne({ name:req.params.name }, function (err, ingredient) {
+        models.Ingredient.findOne({ _id:req.params.id }, function (err, ingredient) {
             if (!err) {
                 if (ingredient.length != 0) {
                     res.send(ingredient);
@@ -119,7 +120,7 @@ module.exports = function (server, models) {
                 next(new restify.InternalError("Failed to read ingredient due to an unexpected internal error"));
             }
         });
-    });
+    }); //WORKS!
 
     server.get('/ingredient/:companyName', function (req, res, next) {
         console.log('Select all ingredients company requested');
@@ -141,5 +142,7 @@ module.exports = function (server, models) {
                 next(new restify.InternalError("Failed to read ingredients due to an unexpected internal error"));
             }
         });
-    });
+    }); //FIXME cannot work like this, because it will conflict with the above method
+
+    //TODO: search ingredients based on name
 }
