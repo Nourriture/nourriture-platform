@@ -48,7 +48,7 @@ module.exports = function (server, models) {
     {
         console.log('Select recipe by id requested');
 
-        models.Recipe.find({ "_id":req.params.id }, function(err, Recipe) 
+        models.Recipe.find({ "_id":req.params.id }, function(err, recipe)
         {
             if(!err) 
                 {
@@ -76,7 +76,7 @@ module.exports = function (server, models) {
                 next();
             }
         })*/
-    });
+    }); //WORKS
 
     server.get('/recipe/:name', function (req, res, next) 
     {
