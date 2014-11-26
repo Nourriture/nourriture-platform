@@ -8,7 +8,7 @@ var saveModule = require('save')('recipe');
 
 module.exports = function (server, models) {
 
-    server.post('/recipe/', function (req, res, next)
+    server.post('/recipe', function (req, res, next)
     {
         console.log('Insert Recipe requested');
 
@@ -21,10 +21,15 @@ module.exports = function (server, models) {
             {
                res.send(req.body);
                next();
-            } 
-            else if (req.params.name === undefined) 
+            }
+            else
             {
-            return next(new restify.InvalidArgumentError('Recipe name attribute missing'));
+                if(err.name == "ValidationError") {
+                    next(new restify.InvalidContentError(err.toString()));  //Restify takes care of HTTP error handling
+                } else {
+                    console.error("Failed to insert recipe into database:", err);
+                    next(new restify.InternalError("Failed to insert recipe due to an unexpected internal error"));    //Restify takes care of HTTP error handling
+                }
             }         
 
         });
@@ -37,7 +42,7 @@ module.exports = function (server, models) {
             res.send(201, recipe) //the '201 Created' HTTP response code + created recipe
             next();
         })*/
-    });
+    }); //WORKS
 
     server.get('/recipe/:id', function (req, res, next) 
     {
