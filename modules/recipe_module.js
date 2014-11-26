@@ -42,7 +42,7 @@ module.exports = function (server, models) {
             res.send(201, recipe) //the '201 Created' HTTP response code + created recipe
             next();
         })*/
-    }); //WORKS
+    }); //WORKS!
 
     server.get('/recipe/:id', function (req, res, next) 
     {
@@ -76,7 +76,7 @@ module.exports = function (server, models) {
                 next();
             }
         })*/
-    }); //WORKS
+    }); //WORKS!
 
     server.get('/recipe/:name', function (req, res, next) 
     {
@@ -131,7 +131,7 @@ module.exports = function (server, models) {
                 next(new restify.InternalError("Failed to read recipes due to an unexpected internal error"));
             }
         });
-    }); //WORKS
+    }); //WORKS!
 
     server.put('/recipe/:id', function (req, res, next) 
     {
@@ -190,7 +190,7 @@ module.exports = function (server, models) {
             res.send();
             next();
         })*/
-    }); //WORKS
+    }); //WORKS!
 
     server.del('/recipe/:id', function (req, res, next) 
     {
