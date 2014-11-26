@@ -122,11 +122,16 @@ module.exports = function (server, models) {
     {
         console.log('Select all recipes requested');
 
-        models.Recipe.find({}, function (error, recipe) {
-            res.send(companies);
-            next();
+        models.Recipe.find(function (error, recipes) {
+            if(!error) {
+                res.send(recipes);
+                next();
+            } else {
+                console.error("Failed to read recipes from database:", error);
+                next(new restify.InternalError("Failed to read recipes due to an unexpected internal error"));
+            }
         });
-    });
+    }); //WORKS
 
     server.put('/recipe/:id', function (req, res, next) 
     {
