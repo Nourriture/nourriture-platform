@@ -30,7 +30,7 @@ module.exports = function (server, models) { //passing mongoose object to constr
         });
     });
 
-    //Read a company based on ID
+    //Read a company based on username
     server.get('/company/:username', function (req, res, next) {
         console.log('Read company requested');
 
