@@ -10,7 +10,7 @@ var fs = require('fs');
 module.exports = function (server, models) { //passing mongoose object to constructor (this anonymous method)
 
     //Create a company
-    server.post('/company/', function(req, res, next) {
+    server.post('/company', function(req, res, next) {
         console.log('Create company requested');
 
         var newCompany = new models.Company(req.body);  //req.body has to be POSTed in JSON format!!!
