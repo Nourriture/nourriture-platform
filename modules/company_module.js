@@ -49,15 +49,20 @@ module.exports = function (server, models) {
         });
     });
 
-    //Read all companies //TODO: finish me
-    /*server.get('/company', function (req, res, next) {
+    //Read all companies
+    server.get('/company', function (req, res, next) {
         console.log('Read all companies requested');
 
-        saveModule.find({}, function (error, companies) {
-            res.send(companies);
-            next();
-        })
-    });*/
+        models.Company.find(function(err, companies) {
+            if(!err) {
+                res.send(companies);
+                next();
+            } else {
+                console.error("Failed to read companies from database:", err);
+                next(new restify.InternalError("Failed to read companies due to an unexpected internal error"));
+            }
+        });
+    });
 
     //Update a company
     server.put('/company/:username', function (req, res, next) {
