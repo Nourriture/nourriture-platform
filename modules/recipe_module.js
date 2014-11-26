@@ -4,7 +4,7 @@
  */
 
 var restify = require('restify');
-var saveModule = require('save')('recipe');
+//var saveModule = require('save')('recipe');
 
 module.exports = function (server, models) {
 
