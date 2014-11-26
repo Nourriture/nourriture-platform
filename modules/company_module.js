@@ -141,13 +141,5 @@ module.exports = function (server, models) {
                 next(new restify.InternalError("Failed to delete company due to an unexpected internal error"));
             }
         });
-
-        /*saveModule.delete(req.params.id, function (error, company) {
-            if (error) {
-                return next(new restify.InvalidArgumentError(JSON.stringify(error.errors)))
-            }
-            res.send();
-            next();
-        })*/
     });
 };
