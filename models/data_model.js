@@ -7,7 +7,7 @@ var util = require('./data_model_middleware');
 
 module.exports = function (mongoose) {  //passing mongoose object to constructor (this anonymous method)
 
-    // COMPANY
+    // COMPANY, username = unique ID
     var Company = mongoose.Schema({     //with Mongoose, everything is derived from a Schema (http://mongoosejs.com/docs/guide.html)
         created: { type: Date, required: true },
         modified: { type: Date, required: true },
@@ -21,7 +21,7 @@ module.exports = function (mongoose) {  //passing mongoose object to constructor
     });
     Company.pre('validate', true, util.updateTimeStamps);   //middleware (http://mongoosejs.com/docs/middleware.html), will get executed for the entire object and change "created" and "modified" values
 
-    // GASTRONOMIST
+    // GASTRONOMIST, username = unique ID
     var PartialRecipe = mongoose.Schema( {
         created: { type: Date, required: true },
         title: { type: String, validate: util.strLength(64) },
@@ -43,7 +43,7 @@ module.exports = function (mongoose) {  //passing mongoose object to constructor
     });
     Gastronomist.pre('validate', true, util.updateTimeStamps);
 
-    // INGREDIENT
+    // INGREDIENT, _id = unique ID
     var Ingredient = mongoose.Schema({
         created: { type: Date, required: true },
         modified: { type: Date, required: true },
@@ -59,7 +59,7 @@ module.exports = function (mongoose) {  //passing mongoose object to constructor
     });
     Ingredient.pre('validate', true, util.updateTimeStamps);
 
-    // RECIPE
+    // RECIPE, _id = unique ID
     var RecipeIngredient = mongoose.Schema( {
         name: { type: String, validate: util.strLength(64) },
         quantity: Number,
