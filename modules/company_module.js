@@ -5,11 +5,7 @@
 
 var restify = require('restify');
 var fs = require('fs');
-<<<<<<< HEAD
-//var _ = require('lodash'); TODO: what for??
-=======
 //var _ = require('lodash'); TODO: what for hm?
->>>>>>> paja
 
 module.exports = function (server, models) { //passing mongoose object to constructor (this anonymous method)
 

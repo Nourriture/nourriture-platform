@@ -5,10 +5,6 @@
 
 var restify             = require('restify');
 var mongoose            = require("mongoose");
-<<<<<<< HEAD
-var models              = require("./models/data_model")(mongoose); //passing "mongoose" object to data_model's constructor
-=======
->>>>>>> paja
 var nconf               = require("nconf");
 // Load models
 var models              = require("./models/data_model")(mongoose); //passing "mongoose" object to data_model's constructor (will use it to define Schemas)
