@@ -89,7 +89,7 @@ module.exports = function (server, models) { //passing mongoose object to constr
                                 next(new restify.InvalidContentError(err.toString()));
                             } else {
                                 console.error("Failed to insert company into database:", err);
-                                next(new restify.InternalError("Failed to insert company due to an unexpected internal error"));
+                                next(new restify.InternalError("Failed to update company due to an unexpected internal error"));
                             }
                         }
                     });
@@ -100,7 +100,7 @@ module.exports = function (server, models) { //passing mongoose object to constr
             } else {
                 // Database connection error
                 console.error("Failed to query database for company profile:", err);
-                next(new restify.InternalError("Failed to insert company due to an unexpected internal error"));
+                next(new restify.InternalError("Failed to update company due to an unexpected internal error"));
             }
         });
     });
