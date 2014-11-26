@@ -75,7 +75,7 @@ module.exports = function (server, models) {
                     var company = result[0];    // Get the first founded company
 
                     // Overwrite fields with value from request body
-                    for (var key in req.body) {
+                    for (var key in req.body) {     //req.body has to be POSTed in JSON format!!!
                         company[key] = req.body[key];
                     }
 
