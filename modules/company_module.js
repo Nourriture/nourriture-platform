@@ -72,7 +72,7 @@ module.exports = function (server, models) {
         models.Company.find({ username:req.params.username }, function(err, result) {
             if(!err) {
                 if(result.length != 0) {
-                    var company = result[0];
+                    var company = result[0];    // Get the first founded company
 
                     // Overwrite fields with value from request body
                     for (var key in req.body) {
@@ -103,26 +103,7 @@ module.exports = function (server, models) {
                 next(new restify.InternalError("Failed to insert company due to an unexpected internal error"));
             }
         });
-
-        /*if (req.params.name === undefined) {
-            return next(new restify.InvalidArgumentError('Company name attribute missing'))
-        }
-        else if (req.params.address === undefined) {
-            return next(new restify.InvalidArgumentError('Company address attribute missing'));
-        }
-
-        saveModule.update({
-            _id: req.params.id,
-            name: req.params.name,
-            address: req.params.address
-        }, function (error, user) {
-            if (error) {
-                return next(new restify.InvalidArgumentError(JSON.stringify(error.errors)))
-            }
-            res.send();
-            next();
-        })*/
-    });   //TODO: why does not work to test with WebStorm REST plugin???
+    });
 
     //Delete a company
     server.del('/company/:username', function (req, res, next) {
