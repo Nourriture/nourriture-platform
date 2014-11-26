@@ -1,3 +1,12 @@
 //new COMPANY JSON
 {"name":"Coca Cola",
 "username":"C&C"}
+
+//new INGREDIENT JSON
+{"name":"bread",
+"company":"547554543818200340db007b"}
+
+//new RECIPE JSON (have to create a gastronomist before "db.gastronomists.insert({"username":"paja", "email":"p@p.cz", "name":"Paja"})")
+{"title":"Simple sushi",
+"description":"boil rice and put a fresh fish on it",
+"author":"5475fd936bcf35fa8c287344"}
