@@ -190,7 +190,7 @@ module.exports = function (server, models) {
     {
         console.log('Delete recipe requested');
 
-        models.Consumer.findOneAndRemove({ "_id":req.params.id}, function(err, deletedRecipe) {
+        models.Recipe.findOneAndRemove({ "_id":req.params.id}, function(err, deletedRecipe) {
             if(!err) 
             {
                 if(deletedRecipe) 
@@ -209,5 +209,5 @@ module.exports = function (server, models) {
                 next(new restify.InternalError("Failed to recipe due to an unexpected internal error"));
             }
         });
-    });
+    }); //WORKS
 }
