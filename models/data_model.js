@@ -19,7 +19,7 @@ module.exports = function (mongoose) {  //passing mongoose object to constructor
         phone: { type: String, validate: util.strLength(16) },
         email: { type: String, validate: util.strLength(128) }
     });
-    Company.pre('validate', true, util.updateTimeStamps);   //Mongoose's middleware (http://mongoosejs.com/docs/middleware.html)
+    Company.pre('validate', true, util.updateTimeStamps);   //middleware (http://mongoosejs.com/docs/middleware.html), will get executed for the entire object and change "created" and "modified" values
 
     // GASTRONOMIST
     var PartialRecipe = mongoose.Schema( {
