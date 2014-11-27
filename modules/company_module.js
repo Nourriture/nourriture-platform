@@ -17,7 +17,7 @@ module.exports = function (server, models) { //passing mongoose object to constr
 
         newCompany.save(function (err) {
             if(!err) {
-                res.send(req.body);
+                res.send(newCompany);
                 next();
             } else {
                 if(err.name == "ValidationError") {
