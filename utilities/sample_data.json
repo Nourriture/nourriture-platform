@@ -4,6 +4,16 @@
   "username": "C&C"
 }
 
+//new GASTRONOMIST JSON
+{
+"username": "gordon",
+"name":"Gordon Ramsay",
+"email":"g@g.com",
+"occupation":"Chef",
+"picture":"http://ts4.mm.bing.net/th?id=HN.608030845369388150&pid=1.7",
+"bio":"Gordon James Ramsay, Jr. (born 8 November 1966) is a Scottish born British chef and restaurateur. His restaurants have been awarded 15 Michelin stars in total and currently hold 14. His signature restaurant, Restaurant Gordon Ramsay in Chelsea, London, has held 3 Michelin stars since 2001. Ramsay is known for presenting TV programmes about competitive cookery and food, such as the British series Hell's Kitchen, The F Word, and Ramsay's Kitchen Nightmares, along with the American versions of Hell's Kitchen, Kitchen Nightmares, MasterChef, MasterChef Junior and Hotel Hell."
+}
+
 //new INGREDIENT JSON
 {"name": "bread",
 "calories": 10,
