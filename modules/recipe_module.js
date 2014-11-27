@@ -37,12 +37,19 @@ module.exports = function (server, models) {
                 if(!err){
                     console.log('All ingredients have been looked up successfully');
 
-                    for (i = 0; i < resultArray.length; i++) {
-                        var ingredient = resultArray[i];
-                        totalFats += ingredient.fat;
-                        totalCarbs += ingredient.carbs;
-                        totalProteins += ingredient.proteins;
-                        totalCalories += ingredient.calories;
+                    for (i = 0; i < resultArray.length; i++) {  // Loop through the looked up ingredients
+                        var ingredientLookup = resultArray[i];
+
+                        for (a = 0; a < req.body.ingredients.length; a++) { // Loop through the request body ingredients
+                            var ingredientRequest = req.body.ingredients[a];
+
+                            if(ingredientLookup._id == ingredientRequest.original){  // If they match
+                                totalFats += ingredientLookup.fat * ingredientRequest.quantity;  // Multiply the nutrition value by quantity
+                                totalCarbs += ingredientLookup.carbs * ingredientRequest.quantity;
+                                totalProteins += ingredientLookup.proteins * ingredientRequest.quantity;
+                                totalCalories += ingredientLookup.calories * ingredientRequest.quantity;
+                            }
+                        }
                     }
 
                     //Add the total amount of nutrition values to new recipe
@@ -53,7 +60,7 @@ module.exports = function (server, models) {
 
                     newRecipe.save(function (err) {
                         if(!err) {
-                            res.send(req.body);
+                            res.send(newRecipe);
                             next();
                         }
                         else {
