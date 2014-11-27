@@ -80,7 +80,7 @@ module.exports = function (server, models) {
         else{
             newRecipe.save(function (err) {
                 if(!err) {
-                    res.send(req.body);
+                    res.send(newRecipe);
                     next();
                 }
                 else {
