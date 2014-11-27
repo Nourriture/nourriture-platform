@@ -4,9 +4,42 @@
 
 //new INGREDIENT JSON
 {"name":"bread",
+"calories":12,
+"carbs":312,
+"proteins":143,
+"fat":90,
+"picture":"http://www.iconshock.com/img_jpg/REALVISTA/food/jpg/256/bread_icon.jpg",
+"company":"547554543818200340db007b"}
+
+{"name":"onion",
+"calories":5,
+"carbs":30,
+"proteins":90,
+"fat":3,
+"picture":"http://img3.wikia.nocookie.net/__cb20121010115210/farmville2/images/5/51/Onion.png",
+"company":"547554543818200340db007b"}
+
+{"name":"ketchup",
+"calories":500,
+"carbs":32,
+"proteins":431,
+"fat":190,
+"picture":"http://38.media.tumblr.com/avatar_27c0c1dd0981_128.png",
 "company":"547554543818200340db007b"}
 
 //new RECIPE JSON (have to create a gastronomist before "db.gastronomists.insert({"username":"paja", "email":"p@p.cz", "name":"Paja"})")
-{"title":"Simple sushi",
-"description":"boil rice and put a fresh fish on it",
-"author":"5475fd936bcf35fa8c287344"}
+{"title":"Sushi",
+"description":"The famous Japanese food",
+"instruction":"boil rice and put a fresh fish on it",
+"picture":"http://icons.iconarchive.com/icons/madoyster/sushi/256/sushi-2-icon.png",
+"difficulty":3,
+"author":"5475fd936bcf35fa8c287344",
+"ingredients":["5476d89cb7ec7568058b7f4b", "5476d8a3b7ec7568058b7f4c"]}
+
+{"title":"Goulash",
+"description":"The famous Hungarian food",
+"instruction":"boil beef meat with onion, garlic, peppers etc.",
+"picture":"http://homespunsprout.com/wp-content/uploads/2012/12/hungarian-goulash-2-3.jpg",
+"difficulty":5,
+"author":"5475fd936bcf35fa8c287344",
+"ingredients":["5476d89cb7ec7568058b7f4b", "5476d8a3b7ec7568058b7f4c"]}
