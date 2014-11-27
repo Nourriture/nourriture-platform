@@ -4,6 +4,7 @@
  */
 
 var restify = require('restify');
+var async = require('async');
 //var saveModule = require('save')('recipe');
 
 module.exports = function (server, models) {
@@ -14,34 +15,77 @@ module.exports = function (server, models) {
 
         var newRecipe = new models.Recipe(req.body);
 
-        newRecipe.save(function (err)
-        {
+        // If ingredients provided
+        if(req.body.ingredients.length != 0){
 
-            if(!err) 
-            {
-               res.send(req.body);
-               next();
-            }
-            else
-            {
-                if(err.name == "ValidationError") {
-                    next(new restify.InvalidContentError(err.toString()));  //Restify takes care of HTTP error handling
-                } else {
-                    console.error("Failed to insert recipe into database:", err);
-                    next(new restify.InternalError("Failed to insert recipe due to an unexpected internal error"));    //Restify takes care of HTTP error handling
+            // Count all the nutrition values of provides ingredient
+            var totalFats = 0, totalCarbs = 0, totalProteins = 0, totalCalories = 0;
+            var resultArray = new Array();
+
+            // Lookup each ingredient from recipe in parallel
+            async.each(req.body.ingredients, function (ingredient, callback){
+                models.Ingredient.findOne({ _id:ingredient.original }, function(err, matchingIngredient){
+                    if(!err) {
+                        resultArray.push(matchingIngredient);
+                        callback();     // If no error has occurred, the callback should be run without arguments or with an explicit null argument.
+                    }
+                    else{
+                        callback(err);  // The main callback (for the each function) is immediately called with the error
+                    }
+                });
+            }, function (err){
+                if(!err){
+                    console.log('All ingredients have been looked up successfully');
+
+                    for (i = 0; i < resultArray.length; i++) {
+                        var ingredient = resultArray[i];
+                        totalFats += ingredient.fat;
+                        totalCarbs += ingredient.carbs;
+                        totalProteins += ingredient.proteins;
+                        totalCalories += ingredient.calories;
+                    }
+
+                    //Add the total amount of nutrition values to new recipe
+                    newRecipe.fat = totalFats;
+                    newRecipe.carbs = totalCarbs;
+                    newRecipe.proteins = totalProteins;
+                    newRecipe.calories = totalCalories;
+
+                    newRecipe.save(function (err) {
+                        if(!err) {
+                            res.send(req.body);
+                            next();
+                        }
+                        else {
+                            if(err.name == "ValidationError") {
+                                next(new restify.InvalidContentError(err.toString()));  //Restify takes care of HTTP error handling
+                            } else {
+                                console.error("Failed to insert recipe into database:", err);
+                                next(new restify.InternalError("Failed to insert recipe due to an unexpected internal error"));    //Restify takes care of HTTP error handling
+                            }
+                        }
+                    });
                 }
-            }         
-
-        });
-        
-
-/*        saveModule.create({name: req.params.name, components: req.params.components}, function (error, recipe) {
-            if (error) {
-                return next(new restify.InvalidArgumentError(JSON.stringify(error.errors)))
-            }
-            res.send(201, recipe) //the '201 Created' HTTP response code + created recipe
-            next();
-        })*/
+                else
+                    console.error("Failed to lookup ingredients from database:", err);
+            });
+        }
+        else{
+            newRecipe.save(function (err) {
+                if(!err) {
+                    res.send(req.body);
+                    next();
+                }
+                else {
+                    if(err.name == "ValidationError") {
+                        next(new restify.InvalidContentError(err.toString()));  //Restify takes care of HTTP error handling
+                    } else {
+                        console.error("Failed to insert recipe into database:", err);
+                        next(new restify.InternalError("Failed to insert recipe due to an unexpected internal error"));    //Restify takes care of HTTP error handling
+                    }
+                }
+            });
+        }
     }); //WORKS!
 
     server.get('/recipe/:id', function (req, res, next) 
