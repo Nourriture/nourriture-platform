@@ -13,7 +13,7 @@ module.exports = function (server, models) {
         var newIngredient = new models.Ingredient(req.body);
         newIngredient.save(function (err) {
             if (!err) {
-                res.send(req.body);
+                res.send(newIngredient);
                 next();
             }
             else {
