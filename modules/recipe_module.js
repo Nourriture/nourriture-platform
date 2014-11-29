@@ -5,7 +5,6 @@
 
 var restify = require('restify');
 var async = require('async');
-//var saveModule = require('save')('recipe');
 
 module.exports = function (server, models) {
 
@@ -112,21 +111,6 @@ module.exports = function (server, models) {
                 next(new restify.ResourceNotFoundError("No recipes found with the given id"));
             }
         });
-
-
-/*        saveModule.findOne({_id: req.params.id}, function (error, recipe) {
-            if (error) {
-                return next(new restify.InvalidArgumentError(JSON.stringify(error.errors)))
-            }
-
-            if (recipe) {
-                res.send(recipe)
-                next();
-            } else {
-                res.send(404)
-                next();
-            }
-        })*/
     }); //WORKS!
 
     server.get('/recipe/:name', function (req, res, next) 
@@ -153,20 +137,6 @@ module.exports = function (server, models) {
                 next(new restify.InternalError("Failed to get recipe due to an unexpected internal error"));
             }
         });
-
-        /*saveModule.findOne({_name: req.params.name}, function (error, recipe) {
-            if (error) {
-                return next(new restify.InvalidArgumentError(JSON.stringify(error.errors)))
-            }
-
-            if (recipe) {
-                res.send(recipe)
-                next();
-            } else {
-                res.send(404)
-                next();
-            }
-        })*/
     }); //FIXME cannot work like this, because it will conflict with the above method
 
     server.get('/recipe', function (req, res, next) 
@@ -229,18 +199,6 @@ module.exports = function (server, models) {
                 next(new restify.InternalError("Failed to update recipe due to an unexpected internal error"));
             }
         });
-        /*
-        saveModule.update({
-            _id: req.params.id,
-            name: req.params.name,
-            address: req.params.components
-        }, function (error, user) {
-            if (error) {
-                return next(new restify.InvalidArgumentError(JSON.stringify(error.errors)))
-            }
-            res.send();
-            next();
-        })*/
     }); //WORKS!
 
     server.del('/recipe/:id', function (req, res, next) 
