@@ -6,6 +6,47 @@
 var restify = require('restify');
 var async = require('async');
 
+
+var units = {
+    liquid: [
+        {
+            name: "tsp",
+            measure: 5 // ml
+        },
+        {
+            name: "spoon",
+            measure: 15 // ml
+        },
+        {
+            name: "dl",
+            measure: 100 // ml
+        },
+        {
+            name: "cup",
+            measure: 250 // ml
+        }
+    ],
+    solids: [
+        {
+            name: "g",
+            measure: 1 // gram
+        },
+        {
+            name: "dcg",
+            measure: 10 // gram
+        },
+        {
+            name: "ounce",
+            measure: 28 // gram
+        },
+        {
+            name: "kg",
+            measure: 1000 // gram
+        }
+    ]
+};
+
+
 module.exports = function (server, models) {
 
     server.post('/recipe', function (req, res, next)
@@ -225,4 +266,11 @@ module.exports = function (server, models) {
             }
         });
     }); //WORKS
+
+    // Returns list of units (see list at top)
+    server.get('/unit', function (req, res, next)
+    {
+        res.send(units);
+        next();
+    });
 }
