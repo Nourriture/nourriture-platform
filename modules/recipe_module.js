@@ -154,7 +154,7 @@ module.exports = function (server, models) {
         });
     }); //WORKS!
 
-    server.get('/recipe/name:name', function (req, res, next) 
+    server.get('/recipe/name/:name', function (req, res, next) 
     {
         console.log('Select recipe by name requested');
 
