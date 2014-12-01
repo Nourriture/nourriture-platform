@@ -6,6 +6,7 @@
 var restify             = require('restify');
 var mongoose            = require("mongoose");
 var nconf               = require("nconf");
+var sessions            = require('client-sessions');
 
 // Load data models
 var models              = require("./models/data_model")(mongoose); //passing "mongoose" object to data_model's constructor (will use it to define Schemas)
@@ -15,9 +16,18 @@ require("./modules/config_module")(nconf);
 
 // Initialize server
 var server = restify.createServer({ name: nconf.get("name"), version: nconf.get("version") });
-server.use(restify.fullResponse());
 server.use(restify.bodyParser({ mapParams : false }));
 server.use(restify.queryParser());
+server.use(sessions({ cookieName : "session", secret: nconf.get("sessionSecret") }));
+
+// Allow Cross-origin requests
+if(nconf.get("allowCORS"))
+{
+    server.use(restify.CORS({
+        origins: ["http://localhost:2124"],
+        credentials: true
+    }));
+}
 
 // Load authentication module
 require("./modules/auth_module")(server, models);

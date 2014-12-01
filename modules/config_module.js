@@ -14,6 +14,8 @@ module.exports = function (nconf) {
         "name": "Nourriture Server!",
         "version": "0.0.1",
         "port": 8080,
-        "connection-string": "mongodb://localhost:27017/nourriture-app"
+        "connection-string": "mongodb://localhost:27017/nourriture-app",
+        "allowCORS": true,
+        "sessionSecret": "allyourbasearebelongtous"
     });
 };
