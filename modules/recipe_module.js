@@ -180,7 +180,7 @@ module.exports = function (server, models) {
         });
     }); //FIXME cannot work like this, because it will conflict with the above method
 
-    server.get('/recipe', function (req, res, next) 
+    server.get('/recipe', function (req, res, next)
     {
         console.log('Select all recipes requested');
 

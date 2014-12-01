@@ -5,6 +5,7 @@
 
 var restify = require('restify');
 var fs = require('fs');
+var async = require('async');
 //var _ = require('lodash'); TODO: what for hm?
 
 module.exports = function (server, models) { //passing mongoose object to constructor (this anonymous method)
@@ -53,15 +54,26 @@ module.exports = function (server, models) { //passing mongoose object to constr
     server.get('/company', function (req, res, next) {
         console.log('Read all companies requested');
 
-        models.Company.find(function(err, companies) {
-            if(!err) {
-                res.send(companies);
-                next();
-            } else {
-                console.error("Failed to read companies from database:", err);
-                next(new restify.InternalError("Failed to read companies due to an unexpected internal error"));
+        async.waterfall([
+                function (done) {
+                    var searchterm = req.params["search"];
+                    if(searchterm) {
+                        models.Company.find({ "name": req.params["search"] }, done);
+                    } else {
+                        models.Company.find(done);
+                    }
+                }
+            ],
+            function (err, companies) {
+                if(!err) {
+                    res.send(companies);
+                    next();
+                } else {
+                    console.error("Failed to read companies from database:", err);
+                    next(new restify.InternalError("Failed to read companies due to an unexpected internal error"));
+                }
             }
-        });
+        );
     });
 
     //Update a company
