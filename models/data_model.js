@@ -84,12 +84,24 @@ module.exports = function (mongoose) {  //passing mongoose object to constructor
     });
     Recipe.pre('validate', true, util.updateTimeStamps);
 
+    // USER, username = unique ID
+    var User = mongoose.Schema({
+        created: { type: Date, required: true },
+        modified: { type: Date, required: true },
+        username: { type: String, required: true, unique: true },
+        password: { type: String, required: true},
+        role : { type: String, required: true },        // Authorization role (raw|gastro|comp|both|admin)
+        authMethod: { type: String, required: true }    // Authentication method (local|fb|go)
+    });
+    User.pre('validate', true, util.updateTimeStamps);
+
 
     // Bind to DB collection names and return on single object
     return {
         Company: mongoose.model("company", Company),    //to use SCHEMA definition, we need to convert SCHEMA into a MODEL (model is a class with which we construct documents)
         Gastronomist: mongoose.model("gastronomist", Gastronomist),
         Ingredient: mongoose.model("ingredient", Ingredient),
-        Recipe: mongoose.model("recipe", Recipe)
+        Recipe: mongoose.model("recipe", Recipe),
+        User: mongoose.model("user", User)
     };
 };
