@@ -40,10 +40,17 @@ module.exports = function (server, models) {
 
     // Session
     passport.serializeUser(function(user, done) {
-        done(null, user.id);
+        done(null, user.username);
+
     });
-    passport.deserializeUser(function(id, done) {
-        models.User.findById(id, done);
+    passport.deserializeUser(function(username, done) {
+        models.User.findOne({ username: username }, function(err, user) {
+           if(err) {
+               return done(err);
+           } else {
+                done(null, user);
+           }
+        });
     });
 
     // Local authentication strategy
@@ -74,6 +81,7 @@ module.exports = function (server, models) {
     }));
 
     server.use(passport.initialize());
+    server.use(passport.session());
 
     server.post('/login', function(req, res, next) {
         passport.authenticate('local', function(err, user, info) {
@@ -118,5 +126,15 @@ module.exports = function (server, models) {
                 }
             }
         });
+    });
+
+    // Tiny endpoint for verifying whether we are logged in // TODO: Remove when authorization has been implemented across application
+    server.get('/testlogin', function (req, res, next) {
+        if (req.isAuthenticated()) {
+            res.send("Yay, you're logged in already!");
+        } else {
+            res.send("Sorry, please log in");
+        }
+        next();
     });
 };
