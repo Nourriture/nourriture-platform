@@ -6,7 +6,8 @@
 var restify             = require('restify');
 var mongoose            = require("mongoose");
 var nconf               = require("nconf");
-// Load models
+
+// Load data models
 var models              = require("./models/data_model")(mongoose); //passing "mongoose" object to data_model's constructor (will use it to define Schemas)
 
 // Load configuration
@@ -15,7 +16,11 @@ require("./modules/config_module")(nconf);
 // Initialize server
 var server = restify.createServer({ name: nconf.get("name"), version: nconf.get("version") });
 server.use(restify.fullResponse());
-server.use(restify.bodyParser());
+server.use(restify.bodyParser({ mapParams : false }));
+server.use(restify.queryParser());
+
+// Load authentication module
+require("./modules/auth_module")(server, models);
 
 // Server startup function, should be run when all routes have been registered and we are ready to listen
 var startServer = function() {
