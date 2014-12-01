@@ -47,8 +47,8 @@
 "difficulty": 3,
 "author": "5475fd936bcf35fa8c287344",
 "ingredients":[
-{"quantity": 3, "quantityUnit": "slices", "original": "54774102e0481c340d06c39d"},
-{"quantity": 1, "quantityUnit": "pieces", "original": "5477410de0481c340d06c39e"}]}
+{"name":"bread","quantity": 3, "quantityUnit": "slices", "original": "5477571adf67049a124cbd88"},
+{"name":"onion","quantity": 1, "quantityUnit": "pieces", "original": "54770ef2b7ec7568058b7f58"}]}
 
 {"title": "Goulash",
 "description": "The famous Hungarian food",
@@ -57,6 +57,6 @@
 "difficulty":5,
 "author": "5475fd936bcf35fa8c287344",
 "ingredients":[
-{"quantity": 5, "quantityUnit": "spoons", "original": "54774113e0481c340d06c39f"},
-{"quantity": 15, "quantityUnit": "pieces", "original": "5477410de0481c340d06c39e"},
-{"quantity": 3, "quantityUnit": "slices", "original": "54774102e0481c340d06c39d"}]}
+{"name":"ketchup", "quantity": 5, "quantityUnit": "spoons", "original": "54770ef8b7ec7568058b7f59"},
+{"name":"onion", "quantity": 15, "quantityUnit": "pieces", "original": "54770ef2b7ec7568058b7f58"},
+{"name":"bread", "quantity": 3, "quantityUnit": "slices", "original": "5477571adf67049a124cbd88"}]}
