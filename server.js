@@ -24,7 +24,7 @@ server.use(sessions({ cookieName : "session", secret: nconf.get("sessionSecret")
 if(nconf.get("allowCORS"))
 {
     server.use(restify.CORS({
-        origins: ["http://localhost:2124"],
+        origins: nconf.get("allowOrigins"),
         credentials: true
     }));
 }

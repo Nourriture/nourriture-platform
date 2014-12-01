@@ -16,6 +16,7 @@ module.exports = function (nconf) {
         "port": 8080,
         "connection-string": "mongodb://localhost:27017/nourriture-app",
         "allowCORS": true,
+        "allowOrigins": ["http://localhost:8080"],
         "sessionSecret": "allyourbasearebelongtous"
     });
 };
