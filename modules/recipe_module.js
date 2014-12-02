@@ -139,7 +139,7 @@ module.exports = function (server, models) {
     {
         console.log('Select recipe by id requested');
 
-        models.Recipe.find({ "_id":req.params.id }, function(err, recipe)
+        models.Recipe.findOne({ "_id":req.params.id }, function(err, recipe)
         {
             if(!err) 
                 {
@@ -154,11 +154,11 @@ module.exports = function (server, models) {
         });
     }); //WORKS!
 
-    server.get('/recipe/name/:name', function (req, res, next) 
+    server.get('/recipe/author/:author', function (req, res, next)
     {
-        console.log('Select recipe by name requested');
+        console.log('Select recipes by author requested');
 
-        models.Recipe.find({ username:req.params.username }, { "_id":0 }, function(err, recipe) 
+        models.Recipe.find({ author:req.params.author }, { "_id":0 }, function(err, recipe)
         {
             if(!err) 
             {
@@ -169,7 +169,7 @@ module.exports = function (server, models) {
                 } 
                 else 
                 {
-                    next(new restify.ResourceNotFoundError("No recipes found with the given name"));
+                    next(new restify.ResourceNotFoundError("No recipes by the given author found"));
                 }
             } 
             else 
@@ -178,7 +178,7 @@ module.exports = function (server, models) {
                 next(new restify.InternalError("Failed to get recipe due to an unexpected internal error"));
             }
         });
-    }); //FIXME cannot work like this, because it will conflict with the above method
+    });
 
     server.get('/recipe', function (req, res, next)
     {
