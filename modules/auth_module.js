@@ -27,7 +27,7 @@ auth.action("add ingredient", ["comp", "both", "admin"]);
 auth.action("edit ingredient", ["comp", "both", "admin"]);
 auth.action("view profile", ["raw", "gastro", "comp", "both", "admin"]); // In the case of gastronomist "profile = Gastronomist + User" and for company "profile = Company + User". For others just User
 auth.action("edit profile", ["raw", "gastro", "comp", "both", "admin"]);
-auth.action("query profiles", ["admin"]);
+auth.action("administer profiles", ["admin"]);
 
 
 module.exports = function (server, models) {
@@ -47,7 +47,7 @@ module.exports = function (server, models) {
                 next();
             });
         });
-    });
+    }); // TODO: Make similar middleware to ensure password is never retrieved (post read?)
 
     // Use bcrypt to compare passwords
     var comparePassword = function(user, candidatePassword, callback) {
@@ -133,7 +133,7 @@ module.exports = function (server, models) {
         var newUser = new models.User(user);
         newUser.save(function (err, resUser) {
             if(!err) {
-                res.send(resUser);
+                res.send(resUser); // TODO: Don't return password, not even if it's hashed
                 next();
             } else {
                 if(err.name == "ValidationError") {
@@ -146,6 +146,84 @@ module.exports = function (server, models) {
             }
         });
     });
+
+    server.get('/user',
+        auth.can("administer profiles"),
+        function (req, res, next) {
+            models.User.find({}, { password:0 }, function (error, users) {
+                if(!error) {
+                    res.send(users);
+                    next();
+                } else {
+                    console.error("Failed to read users from database:", error);
+                    next(new restify.InternalError("Failed to read users due to an unexpected internal error"));
+                }
+            });
+        }
+    );
+
+    server.put('/user/:username',
+        auth.can("edit profile"),
+        function (req, res, next) {
+            // Authorization (Only edit own profile, unless administrator)
+            if(req.user.username != req.params.username && req.user.role != "admin") {
+                throw new auth.UnauthorizedError("edit profile");
+            }
+
+            // Retrieve existing user, overwrite fields, validate and save
+            models.User.findOne({ username:req.params.username }, { password:0 }, function(err, user) {
+                if(!err) {
+                    if(user) {
+                        // Overwrite fields with value from request body
+                        for (var key in req.body) {
+                            user[key] = req.body[key];
+                        }
+
+                        // Validate and save
+                        user.save(function (err) {
+                            if(!err) {
+                                res.send(user);
+                                next();
+                            } else {
+                                if(err.name == "ValidationError") {
+                                    next(new restify.InvalidContentError(err.toString()));
+                                } else {
+                                    console.error("Failed to update user in database:", err);
+                                    next(new restify.InternalError("Failed to update user due to an unexpected internal error"));
+                                }
+                            }
+                        });
+                    } else {
+                        // No user found with given username
+                        next(new restify.ResourceNotFoundError("No users found with the given username"));
+                    }
+                } else {
+                    // Database connection error
+                    console.error("Failed to query database for user profile:", err);
+                    next(new restify.InternalError("Failed to update user due to an unexpected internal error"));
+                }
+            });
+        }
+    );
+
+    server.del('/user/:username',
+        auth.can("administer profiles"),
+        function(req, res, next) {
+            models.User.findOneAndRemove({ username:req.params.username }, { password:0 }, function(err, deletedUser) {
+                if(!err) {
+                    if(deletedUser) {
+                        res.send(deletedUser);
+                        next();
+                    } else {
+                        next(new restify.ResourceNotFoundError("No user found with the given username"));
+                    }
+                } else {
+                    console.error("Failed to delete user profile from database:", err);
+                    next(new restify.InternalError("Failed to delete user due to an unexpected internal error"));
+                }
+            });
+        }
+    );
 
     // Tiny endpoint for verifying whether we are logged in // TODO: Remove when authorization has been implemented across application
     server.get('/testlogin',
