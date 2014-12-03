@@ -8,8 +8,27 @@ var passport = require("passport");
 var LocalStrategy = require('passport-local').Strategy;
 var bcrypt = require("bcrypt");
 var restify = require("restify");
+var auth = require("authorized");
 
-var SALT_WORK_FACTOR = 10;
+var SALT_WORK_FACTOR = 10;  // Intensity of password hashing (a factor of 10 should be fairly difficult to decrypt)
+
+// Roles (All users have 1 (and only 1) role)
+var getRoleFunc = function(role) { return function (req, done) { return done(null, req.user && req.user.role == role) } };
+auth.role("raw", getRoleFunc("raw"));
+auth.role("gastro", getRoleFunc("gastro"));
+auth.role("comp", getRoleFunc("comp"));
+auth.role("both", getRoleFunc("both"));
+auth.role("admin", getRoleFunc("admin"));
+
+// Actions (Platform requests may trigger one of these actions)
+auth.action("add recipe", ["gastro", "both", "admin"]);
+auth.action("edit recipe", ["gastro", "both", "admin"]);
+auth.action("add ingredient", ["comp", "both", "admin"]);
+auth.action("edit ingredient", ["comp", "both", "admin"]);
+auth.action("view profile", ["raw", "gastro", "comp", "both", "admin"]); // In the case of gastronomist "profile = Gastronomist + User" and for company "profile = Company + User". For others just User
+auth.action("edit profile", ["raw", "gastro", "comp", "both", "admin"]);
+auth.action("query profiles", ["admin"]);
+
 
 module.exports = function (server, models) {
 
@@ -129,12 +148,11 @@ module.exports = function (server, models) {
     });
 
     // Tiny endpoint for verifying whether we are logged in // TODO: Remove when authorization has been implemented across application
-    server.get('/testlogin', function (req, res, next) {
-        if (req.isAuthenticated()) {
+    server.get('/testlogin',
+        auth.can("view profile"),
+        function (req, res, next) {
             res.send("Yay, you're logged in already!");
-        } else {
-            res.send("Sorry, please log in");
+            next();
         }
-        next();
-    });
+    );
 };
