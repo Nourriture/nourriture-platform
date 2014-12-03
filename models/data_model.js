@@ -89,6 +89,7 @@ module.exports = function (mongoose) {  //passing mongoose object to constructor
         created: { type: Date, required: true },
         modified: { type: Date, required: true },
         username: { type: String, required: true, unique: true },
+        email: { type: String, required: true, unique: true },
         password: { type: String, required: true},
         role : { type: String, required: true },        // Authorization role (raw|gastro|comp|both|admin)
         authMethod: { type: String, required: true }    // Authentication method (local|fb|go)
