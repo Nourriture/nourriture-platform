@@ -226,11 +226,10 @@ module.exports = function (server, models) {
     );
 
     // Tiny endpoint for verifying whether we are logged in // TODO: Remove when authorization has been implemented across application
-    server.get('/testlogin',
+    server.get('/isloggedin',
         auth.can("view profile"),
         function (req, res, next) {
-            res.send("Yay, you're logged in already!");
-            next();
+            res.send(req.user);
         }
     );
 };
