@@ -114,7 +114,7 @@ module.exports = function (server, models) {
                 if (err) {
                     return next(err);
                 }
-                return res.send({ message: "Logged in successfully!"})
+                return res.send(user);
             });
         })(req, res, next);
     });
