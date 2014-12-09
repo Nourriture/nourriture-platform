@@ -15,7 +15,7 @@ In the root of this repo invoke:
 
 The server will now be running at **127.0.0.1:2121**
 
-*NOTE: If you decide to configure the port and wishes to run a frontend against this backend instance, make sure to adjust the port accordingly in the frontend configuration.*
+*NOTE: If you decide to configure the port and wish to run a frontend against this backend instance, make sure to adjust the port accordingly in the frontend configuration.*
 
 
 ### Architecture
