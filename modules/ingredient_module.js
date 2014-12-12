@@ -112,6 +112,25 @@ module.exports = function (server, models) {
                     next();
                 }
                 else {
+                    next(new restify.ResourceNotFoundError("No ingredient found with the given id"));
+                }
+            }
+            else {
+                console.error("Failed to query database for ingredient profile:", err);
+                next(new restify.InternalError("Failed to read ingredient due to an unexpected internal error"));
+            }
+        });
+    }); //WORKS!
+
+    server.get('/ingredient/name/:name', function (req, res, next) {
+        console.log('Select ingredient name requested');
+        models.Ingredient.findOne({ _name:req.params.name }, function (err, ingredient) {
+            if (!err) {
+                if (ingredient.length != 0) {
+                    res.send(ingredient);
+                    next();
+                }
+                else {
                     next(new restify.ResourceNotFoundError("No ingredient found with the given name"));
                 }
             }
@@ -122,7 +141,7 @@ module.exports = function (server, models) {
         });
     }); //WORKS!
 
-    server.get('/ingredient/:companyName', function (req, res, next) {
+    server.get('/ingredient/company/:companyName', function (req, res, next) {
         console.log('Select all ingredients company requested');
         models.Company.findOne({ name:req.params.name }, function (err, company) {
             if (!err) {
