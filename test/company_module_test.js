@@ -7,10 +7,24 @@ var Supertest   = require('supertest')  // high-level abstraction for testing HT
 var API         = Supertest('http://localhost:2121')
 var MongoClient = require('mongodb').MongoClient    //MongoClient for high-level end to Mongo
 
-/*before(function(done){
-    console.log('BEFORE test, load correct DB connection string')
+before(function(done){
+    console.log('BEFORE test, check whether NodeJS already up and running')
 
-    done()
+    var inter = setInterval(function() {
+        console.log(" - - - Is NodeJS server running???")
+
+        API.get('')
+            .end(function(error,response){
+
+                if(!error){
+                    console.log(" - - - YES NodeJS server is running!!!")
+
+                    clearInterval(inter)
+                    done()
+                }
+            })
+    }, 500)
+
 })  // Straight to DB*/
 
 after(function(done){   //after running all test cases wipe entire Company collection (nothing should be left there though)
