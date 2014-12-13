@@ -35,9 +35,9 @@ module.exports = function (server, models) { ///passing mongoose object to const
     server.get('/company/:username', function (req, res, next) {
         console.log('Read company requested');
 
-        models.Company.find({ username:req.params.username }, function(err, company) {
+        models.Company.findOne({ username:req.params.username }, function(err, company) {
             if(!err) {
-                if(company.length != 0) {
+                if(company) {
                     res.send(company);
                     next();
                 } else {
