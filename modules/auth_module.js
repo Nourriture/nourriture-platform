@@ -126,7 +126,7 @@ module.exports = function (server, models) {
     });
 
     server.post('/user', function (req, res, next) {
-        var user = JSON.parse(req.body);
+        var user = req.body;
         user.authMethod = "local";
         user.role = "raw";
 
