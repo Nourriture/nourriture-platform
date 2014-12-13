@@ -180,6 +180,32 @@ module.exports = function (server, models) {
         });
     });
 
+    server.get('/recipe/title/:title', function (req, res, next)
+    {
+        console.log('Select recipes by title requested');
+
+        models.Recipe.find({ title:req.params.title }, { "_id":0 }, function(err, recipe)
+        {
+            if(!err) 
+            {
+                if(recipe.length != 0) 
+                {
+                    res.send(recipe);
+                    next();
+                } 
+                else 
+                {
+                    next(new restify.ResourceNotFoundError("No recipes by the given title found"));
+                }
+            } 
+            else 
+            {
+                console.error("Failed to query database for recipe:", err);
+                next(new restify.InternalError("Failed to get recipe due to an unexpected internal error"));
+            }
+        });
+    });
+
     server.get('/recipe', function (req, res, next)
     {
         console.log('Select all recipes requested');
