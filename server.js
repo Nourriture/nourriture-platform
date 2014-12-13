@@ -51,7 +51,7 @@ var startServer = function() {
 
     // On successful connection, finalize server startup
     db.once('open', function() {
-        console.log("Connected to database successfully!");
+        console.log("Connected to database " + nconf.get("connection-string") + "  successfully!");
 
         server.listen(nconf.get("port"), function () {  // Finalize server startup by starting to listen at port #
             console.log('- - - %s listening at %s - - -', server.name, server.url);
