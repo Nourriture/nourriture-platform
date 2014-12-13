@@ -8,7 +8,7 @@ var fs = require('fs');
 var async = require('async');
 //var _ = require('lodash'); TODO: what for hm?
 
-module.exports = function (server, models) { //passing mongoose object to constructor (this anonymous method)
+module.exports = function (server, models) { ///passing mongoose object to constructor (this anonymous method)
 
     //Create a company
     server.post('/company', function(req, res, next) {
