@@ -256,7 +256,7 @@ var insertDummyData = function(){
         userCompany4.save(),
         userCompany5.save(),*/
         gastronomist.save(function (error, response){
-            if(!error) gordonID = response._id
+            gordonID = response._id
         }),
         /*company.save(),
         company2.save(),
