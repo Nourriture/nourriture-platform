@@ -13,7 +13,7 @@ module.exports = function (nconf) {
     nconf.defaults({
         "name": "Nourriture Server!",
         "version": "0.0.1",
-        "port": 8080,
+        "port": 2121,
         "connection-string": "mongodb://localhost:27017/nourriture-app",
         "allowCORS": true,
         "allowOrigins": ["http://localhost:8080"],
