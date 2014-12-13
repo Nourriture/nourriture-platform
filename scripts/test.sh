@@ -3,7 +3,7 @@
 #
 # Niels Søholm (2014-10-12)
 
-# TODO: Implement this when we know more about which test framework to use etc.
+# TODO: remove me
 BUILD_NUMBER=321
 
 # Package name (name of outputted archieve)
@@ -24,4 +24,5 @@ cp -r models build/$PK_NAME/models
 cp -r test build/$PK_NAME/test
 
 # Inject build number (from Jenkins environment variable) into package.json
+# TODO: pass in test DB string!
 sed package.json -e "s/\(\"version\":\s\"[0-9]*.[0-9]*.\)[0-9]\"/\1$BUILD_NUMBER\"/g" > build/$PK_NAME/package.json
