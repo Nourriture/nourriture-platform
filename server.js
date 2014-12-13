@@ -76,5 +76,8 @@ var ingredientModule    = require('./modules/ingredient_module')(server, models)
 //GASTRONOMIST related API calls
 var gastronomistModule  = require('./modules/gastronomist_module')(server, models);
 
+//UPLOAD (image) related API calls
+var uploadModule  = require('./modules/upload_module')(server, nconf);
+
 // Connect to DB and start listening
 startServer();
