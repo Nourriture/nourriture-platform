@@ -11,4 +11,4 @@ npm install
 mocha
 
 # For local debug purposes (kill running NodeJS server)
-killall node
+# killall node
