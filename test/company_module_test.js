@@ -4,22 +4,19 @@
 
 var Expect      = require('chai').expect
 var Supertest   = require('supertest')  // high-level abstraction for testing HTTP, while still allowing you to drop down to the lower-level API provided by super-agent
-var Nconf       = require("nconf");
 var API         = Supertest('http://localhost:2121')
 var MongoClient = require('mongodb').MongoClient    //MongoClient for high-level end to Mongo
 
-before(function(done){
+/*before(function(done){
     console.log('BEFORE test, load correct DB connection string')
 
-    require("../modules/config_module")(Nconf);     // Load configuration
-
     done()
-})  // Straight to DB
+})  // Straight to DB*/
 
 after(function(done){   //after running all test cases wipe entire Company collection (nothing should be left there though)
-    console.log('AFTER test, wipe Company collection' + Nconf.get("connection-string"))
+    console.log('AFTER test, wipe Company collection from ' + process.env.dbcon)
 
-    MongoClient.connect(Nconf.get("connection-string"), function(err, connection) {
+    MongoClient.connect(process.env.dbcon, function(err, connection) {
         var collection = connection.collection('companies');
         collection.remove({}, function() {
             connection.close();
