@@ -15,4 +15,4 @@ npm install
 mocha
 
 # For local debug purposes (kill running NodeJS server) - Jenkins will take care of this
-# killall node
+killall node
