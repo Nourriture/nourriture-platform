@@ -47,7 +47,7 @@ module.exports = function (mongoose) {  //passing mongoose object to constructor
     var Ingredient = mongoose.Schema({
         created: { type: Date, required: true },
         modified: { type: Date, required: true },
-        company: { type: mongoose.Schema.Types.ObjectId, ref: "Company", required: true },
+        company: { type: String, required: true },
         type: { type: String, validate: util.strLength(32) }, // liquid / solid
         name: { type: String, validate: util.strLength(64) },
         picture: { type: String, validate: util.strLength(512) },
