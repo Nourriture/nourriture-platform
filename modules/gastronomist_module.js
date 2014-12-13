@@ -27,9 +27,9 @@ module.exports = function (server, models) {
 
     // Read - Gastronomist profile
     server.get('/gastronomist/:username', function (req, res, next) {
-        models.Gastronomist.find({username: req.params.username}, function (err, gastronomist) {
+        models.Gastronomist.findOne({username: req.params.username}, function (err, gastronomist) {
             if (!err) {
-                if (gastronomist.length != 0) {
+                if (gastronomist) {
                     res.send(gastronomist);
                     next();
                 } else {
