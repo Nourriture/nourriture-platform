@@ -104,7 +104,7 @@ module.exports = function (server, models) {
     }); //WORKS!
 
     server.get('/ingredient/:id', function (req, res, next) {
-        console.log('Select ingredient name requested');
+        console.log('Select ingredient id requested');
         models.Ingredient.findOne({ _id:req.params.id }, function (err, ingredient) {
             if (!err) {
                 if (ingredient.length != 0) {
@@ -124,7 +124,7 @@ module.exports = function (server, models) {
 
     server.get('/ingredient/name/:name', function (req, res, next) {
         console.log('Select ingredient name requested');
-        models.Ingredient.findOne({ _name:req.params.name }, function (err, ingredient) {
+        models.Ingredient.find({name:req.params.name }, function (err, ingredient) {
             if (!err) {
                 if (ingredient.length != 0) {
                     res.send(ingredient);
