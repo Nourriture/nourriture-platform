@@ -235,7 +235,7 @@ var insertDummyData = function(){
         var recipe = new models.Recipe({author:gordonID,
          title:'Sushi',
          description:'Famous japanese delicious food.',
-         instructions:'Boil rice, cut fish, wrap fish around rice.',
+         instructions:[{'step':'Boil rice'},{'step':'cut fish'},{'step':'wrap fish around rice'}],
          picture:'http://s.mijnreceptenboek.nl/i/lib/v/sushi-special.png',
          difficulty:4,
          calories:300,
@@ -278,7 +278,7 @@ var insertDummyData = function(){
         function(callback) {
             userCompany5.save(callback)
         },*/
-        function(callback) {
+        /*function(callback) {
             mongoose.connection.db.dropCollection('recipes', callback);
         },
         function(callback) {
@@ -289,7 +289,7 @@ var insertDummyData = function(){
         },
         function(callback) {
             mongoose.connection.db.dropCollection('companies', callback);
-        },
+        },*/
         function(callback) {
             gastronomist.save(function (error, response){
                 if(!error) {
