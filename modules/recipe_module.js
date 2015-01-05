@@ -54,7 +54,6 @@ module.exports = function (server, models) {
         console.log('Insert Recipe requested');
 
         var newRecipe = new models.Recipe(req.body);
-
         // If ingredients provided
         if(req.body.ingredients.length != 0){
 
@@ -64,7 +63,7 @@ module.exports = function (server, models) {
 
             // Lookup each ingredient from recipe in parallel
             async.each(req.body.ingredients, function (ingredient, callback){
-                models.Ingredient.findOne({ _id:ingredient.original }, function(err, matchingIngredient){
+                models.Ingredient.findOne({ _id:ingredient._id }, function(err, matchingIngredient){
                     if(!err) {
                         resultArray.push(matchingIngredient);
                         callback();     // If no error has occurred, the callback should be run without arguments or with an explicit null argument.
@@ -76,14 +75,13 @@ module.exports = function (server, models) {
             }, function (err){
                 if(!err){
                     console.log('All ingredients have been looked up successfully');
-
+                    console.log(resultArray);
                     for (i = 0; i < resultArray.length; i++) {  // Loop through the looked up ingredients
                         var ingredientLookup = resultArray[i];
 
                         for (a = 0; a < req.body.ingredients.length; a++) { // Loop through the request body ingredients
                             var ingredientRequest = req.body.ingredients[a];
-
-                            if(ingredientLookup._id == ingredientRequest.original){  // If they match
+                            if(ingredientLookup._id == ingredientRequest._id){  // If they match
                                 totalFats += ingredientLookup.fat * ingredientRequest.quantity;  // Multiply the nutrition value by quantity
                                 totalCarbs += ingredientLookup.carbs * ingredientRequest.quantity;
                                 totalProteins += ingredientLookup.proteins * ingredientRequest.quantity;
@@ -91,13 +89,13 @@ module.exports = function (server, models) {
                             }
                         }
                     }
-
                     //Add the total amount of nutrition values to new recipe
                     newRecipe.fat = totalFats;
                     newRecipe.carbs = totalCarbs;
                     newRecipe.proteins = totalProteins;
                     newRecipe.calories = totalCalories;
-
+                    console.log(totalCalories);
+                    console.log("NEWRECIPE END :", newRecipe);
                     newRecipe.save(function (err) {
                         if(!err) {
                             res.send(newRecipe);
@@ -105,6 +103,7 @@ module.exports = function (server, models) {
                         }
                         else {
                             if(err.name == "ValidationError") {
+                                console.error("ValidationError", err);
                                 next(new restify.InvalidContentError(err.toString()));  //Restify takes care of HTTP error handling
                             } else {
                                 console.error("Failed to insert recipe into database:", err);
@@ -170,6 +169,33 @@ module.exports = function (server, models) {
                 else 
                 {
                     next(new restify.ResourceNotFoundError("No recipes by the given author found"));
+                }
+            } 
+            else 
+            {
+                console.error("Failed to query database for recipe:", err);
+                next(new restify.InternalError("Failed to get recipe due to an unexpected internal error"));
+            }
+        });
+    });
+
+    server.get('/recipe/title/:title', function (req, res, next)
+    {
+        console.log('Select recipes by title requested');
+
+        models.Recipe.find({ title:req.params.title }, function(err, recipe)
+        {
+            if(!err) 
+            {
+                if(recipe.length != 0) 
+                {
+                    res.send(recipe);
+                    next();
+                } 
+                else 
+                {
+                    console.log('No recipes by the given title found');       
+                    next(new restify.ResourceNotFoundError("No recipes by the given title found"));
                 }
             } 
             else 

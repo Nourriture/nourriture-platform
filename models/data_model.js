@@ -67,13 +67,18 @@ module.exports = function (mongoose) {  //passing mongoose object to constructor
         quantityUnit: { type: String, validate: util.strLength(12) },
         original: { type: mongoose.Schema.Types.ObjectId, ref: "Ingredient" }
     });
+
+    var RecipeInstruction = mongoose.Schema( {
+        step: { type: String, validate: util.strLength(8192) }
+    });
+
     var Recipe = mongoose.Schema({
         created: { type: Date, required: true },
         modified: { type: Date, required: true },
         author: { type: mongoose.Schema.Types.ObjectId, ref: "Gastronomist", required: true },
         title: { type: String, validate: util.strLength(64), required: true },
         description: { type: String, validate: util.strLength(512), required: true },
-        instructions: { type: String, validate: util.strLength(8192) },
+        instructions: [RecipeInstruction],
         picture: { type: String, validate: util.strLength(512) },
         calories: Number,
         carbs: Number,
