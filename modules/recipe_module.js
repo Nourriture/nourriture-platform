@@ -209,8 +209,14 @@ module.exports = function (server, models) {
     server.get('/recipe', function (req, res, next)
     {
         console.log('Select all recipes requested');
+        var query = models.Recipe.find();
 
-        models.Recipe.find(function (error, recipes) {
+        if(req.params.title) {
+            regex = new RegExp(req.params.title, "i");
+            query.find( { title: regex } );
+        }
+
+        query.exec(function (error, recipes) {
             if(!error) {
                 res.send(recipes);
                 next();
