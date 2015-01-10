@@ -95,6 +95,9 @@ module.exports = function (server, models) {
 
         if(req.params.company) {
             query.find({ company:req.params.company });
+        } else if(req.params.name) {
+            regex = new RegExp(req.params.name, "i");
+            query.find( { name: regex } );
         }
 
         query.exec(function (err, ingredients) {
