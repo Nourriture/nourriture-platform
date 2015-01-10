@@ -7,19 +7,38 @@ var restify = require('restify');
 var crypto = require('crypto');
 
 module.exports = function (server, nconf) {
-    var uploadSizeLimit = 1048576; // bytes
+    var uploadSizeLimit = 1048576; // bytes     (1048576 bytes = 1 mb)
+    var expiryTime = 900000; // ms              (900000ms = 15 minutes)
+    var groupRegex = /^gastronomist|company|ingredient|recipe$/; // Allowed folders
+    var bucket = "nourriture"; // S3 bucket to use
 
     // Retrieve a policy token that allows image upload for a specific company
-    server.get('/upload/company/token/:username', function (req, res, next) {
-        console.log('Upload token requests for "' + req.params.username + '"');
+    server.get('/upload/token/:group/:entity', function (req, res, next) {
+        console.log('Upload token requests for "' + req.params.entity + '" (' + req.params.entity + ')');
+
+        var group = req.params.group;
+        var entity = req.params.entity;
 
         // TODO: Add authorization and ensure users only can upload with filename of their own username
 
+        // Verify group parameter (Very important because it dictates which folder to put the file in)
+        if(group) {
+            var match = group.match(groupRegex);
+            if(match) {
+                group = match[0];
+            } else {
+                throw new restify.InvalidContentError("Invalid group");
+            }
+        } else {
+            throw new restify.InvalidContentError("A group needs to be defined");
+        }
+
+        // Policy content
         var s3Policy = {
-            "expiration": "2014-12-14T12:00:00.000Z", // hard coded for testing
+            "expiration": new Date(Date.now() + expiryTime),
             "conditions": [
-                ["starts-with", "$key", "cocacola"],
-                {"bucket": "nourriture-consumer"},
+                ["starts-with", "$key", group + "/" + entity],
+                {"bucket": bucket},
                 {"acl": "public-read"},
                 ["starts-with", "$Content-Type", "image/"],
                 ["content-length-range", 0, uploadSizeLimit]
