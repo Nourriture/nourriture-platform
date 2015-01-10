@@ -63,7 +63,7 @@ module.exports = function (server, models) {
 
             // Lookup each ingredient from recipe in parallel
             async.each(req.body.ingredients, function (ingredient, callback){
-                models.Ingredient.findOne({ _id:ingredient._id }, function(err, matchingIngredient){
+                models.Ingredient.findOne({ _id:ingredient.original }, function(err, matchingIngredient){
                     if(!err) {
                         resultArray.push(matchingIngredient);
                         callback();     // If no error has occurred, the callback should be run without arguments or with an explicit null argument.
