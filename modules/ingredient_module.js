@@ -91,7 +91,13 @@ module.exports = function (server, models) {
 
     server.get('/ingredient', function (req, res, next) {
         console.log('Select all ingredients requested');
-        models.Ingredient.find(function (err, ingredients) {
+        query = models.Ingredient.find();
+
+        if(req.params.company) {
+            query.find({ company:req.params.company });
+        }
+
+        query.exec(function (err, ingredients) {
             if (!err) {
                 res.send(ingredients);
                 next();
@@ -141,20 +147,24 @@ module.exports = function (server, models) {
         });
     }); //WORKS!
 
-    server.get('/ingredient/company/:companyName', function (req, res, next) {
+    server.get('/ingredient/company/:username', function (req, res, next) {
         console.log('Select all ingredients company requested');
-        models.Company.findOne({ name:req.params.name }, function (err, company) {
+        models.Company.findOne({ username:req.params.username }, function (err, company) {
             if (!err) {
-                models.Ingredient.find(function (err, ingredients) {
-                    if (!err) {
-                        res.send(ingredients);
-                        next();
-                    }
-                    else {
-                        console.error("Failed to read ingredients from database:", err);
-                        next(new restify.InternalError("Failed to read ingredients due to an unexpected internal error"));
-                    }
-                });
+                if(company) {
+                    models.Ingredient.find({ company:company.username }, function (err, ingredients) {
+                        if (!err) {
+                            res.send(ingredients);
+                            next();
+                        }
+                        else {
+                            console.error("Failed to read ingredients from database:", err);
+                            next(new restify.InternalError("Failed to read ingredients due to an unexpected internal error"));
+                        }
+                    });
+                } else {
+                    next(new restify.ResourceNotFoundError("No company found with the given id"));
+                }
             }
             else {
                 console.error("Failed to read ingredients from database:", err);
